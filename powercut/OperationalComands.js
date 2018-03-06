@@ -23,7 +23,7 @@ exports.allpowercuts = function (req, next, callback) {
   })
 }
 
-exports.change = function (req, next, callback) { console.log(req.body)
+exports.change = function (req, next, callback) { 
     var param = {
       "_id": ObjectId(req.body._id),
       "status": req.body.status

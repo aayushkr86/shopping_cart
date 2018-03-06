@@ -79,17 +79,26 @@ exports.view = function (param, next, callback) {
 //   })
 // }
 
-exports.update = function (param, next, callback) { console.log(param)
-  var query = {$or: [{ 'google.email': param.email },{ 'facebook.email': param.email },{ 'local.email':param.email }]}
-  Users.findOneAndUpdate(query,
-    {$set:param},{new: true}
-    ,function (err, users) { //console.log(users)
-    if (err) {
-      callback(err, users )
-    } else {
-      callback(null, users)
-    }
-  })
+exports.update = function (param, next, callback) { //console.log(param)
+  Users.findOne({'account':  param.account}).exec(function (err,account) { //console.log(account)
+    if(account == null && !err){
+      Users.findOne({'mobileno': param.mobileno}).exec(function (err,mobileno) {
+        if(mobileno == null && !err){
+
+          var query = {$or: [{ 'google.email': param.email },{ 'facebook.email': param.email },{ 'local.email':param.email }]}
+          Users.findOneAndUpdate(query,{$set:param}
+            ,{new: true, runValidators: true}).then(function (users) { //console.log(users)
+              callback(null, users)
+          }).catch(next)
+
+        }else{
+          callback(true, "mobileno. already taken")
+        }
+      })       
+    }else{
+      callback(true, "accountno. already taken")
+    }                          
+})
 }
 
 
@@ -121,15 +130,10 @@ exports.islocaluser = function (param, next, callback) {
 //resetPasswordToken insertion
 exports.resetPasswordToken = function (param, next, callback) { 
   var query = { 'local.email': param.email }
-  Users.findOneAndUpdate(query,
-    {$set:param},{new: true}
-    ,function (err, users) { //console.log(users)
-    if (err) {
-      callback(err, users )
-    } else {
-      callback(null, users)
-    }
-  })
+  Users.findOneAndUpdate(query,{$set:param}
+    ,{new: true, runValidators: true}).then(function (users) { //console.log(users)
+      callback(null, users)  
+  }).catch(next)
 }
 
 exports.checkreset = function (param, next, callback) { 
@@ -146,12 +150,7 @@ exports.updatepassword = function (param, next, callback) { //console.log(param)
       'resetPasswordExpires': param.resetPasswordExpires,
       'resetPasswordToken' : param.resetPasswordToken,
     }}
-    ,{new: true}
-    ,function (err, password) { //console.log(password)
-    if (err) {
-      callback(err, password )
-    } else {
-      callback(null, password)
-    }
-  })
+    ,{new: true, runValidators: true}).then(function (password) { //console.log(password)
+      callback(null, password)  
+  }).catch(next)
 }

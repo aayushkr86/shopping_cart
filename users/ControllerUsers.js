@@ -85,9 +85,12 @@ router.post('/update-profile',passloginvalidator.isLoggedIn,
 function (req, res, next) {       
   MainUsers.updateuser(req, next, function (err, data) {
     // console.log(err, data)
-    if (err) {
-    response(res, 400, err, [])
-    } else {
+    if (err && data) {
+    response(res, 400, err, data)
+    } 
+    else if(err){
+      response(res, 400, err, [])
+    }else {
     response(res, 200, null, data)
     }
   })  
@@ -130,14 +133,14 @@ router.get('/auth/facebook/redirect', passport.authenticate('facebook', {
 //local signup api
 router.post('/passport-signup', passport.authenticate('local-signup', {
                                 successRedirect : '/user/profile',
-                                failureRedirect : '/signup', 
+                                failureRedirect : '/', 
                                 failureFlash : true 
 }));
 
 //local signin api
 router.post('/passport-login', passport.authenticate('local-login', {
                                 successRedirect : '/user/profile', 
-                                failureRedirect : '/login', 
+                                failureRedirect : '/', 
                                 failureFlash : true 
 })); 
 

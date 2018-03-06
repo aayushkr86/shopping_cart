@@ -141,7 +141,7 @@ var UsersSchema = new Schema({
   account: {
     type: String,
     // index: {unique: true,sparse: true},
-    // required: [true, 'username is required'],
+    required: [true, 'username is required'],
     minlength: 5,
     maxlength: 10,
     validate: {
@@ -153,7 +153,7 @@ var UsersSchema = new Schema({
   },
   firstname: {
     type: String,
-    // required: [true, 'firstname is required'],
+    required: [true, 'firstname is required'],
     minlength: 1,
     maxlength: 15,
   },
@@ -163,13 +163,14 @@ var UsersSchema = new Schema({
   },
   email: {
     type: String,
+    required: [true, 'email is required'],
     minlength: 5,
     maxlength: 20,
   },
   mobileno: {
     type: String,
     // index: {unique: true},
-    // required: [true, 'mobileno is required'],
+    required: [true, 'mobileno is required'],
     validate: {
       validator: function (v) {
         return /^[0-9]{10}$/.test(v)
@@ -182,29 +183,35 @@ var UsersSchema = new Schema({
     default: Date.now
   },
   occupation: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
+    required: [true, 'state is required'],
   },
   discom: {
-    type: String
+    type: String,
+    required: [true, 'discom is required'],
   },
   city: {
-    type: String
+    type: String,
+    required: [true, 'city is required'],
   },
   powerFeeder: {
-    type: String
+    type: String,
+    required: [true, 'powerFeeder is required'],
   },
   pin: {
-    type: Number
+    type: Number,
+    required: [true, 'pin is required'],
   },
   gender: {
     type: String,
     enum:['male','female']
   },
   notification: {
-    type: String,
+    type: [String],
+    default : null,
     enum:['sms','email','push notification']
   },
   

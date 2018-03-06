@@ -35,28 +35,18 @@ exports.ticket = function (param, next, callback) {
 exports.upload = function (param, next, callback) {
   var query = {'_id':param._id}
   Tickets.findByIdAndUpdate(query,{$set:{'photos':param.photos}},
-  {new: true}
-  ,function (err, photos) { //console.log(photos)
-    if (err) {
-      callback(err, photos )
-    } else {
-      callback(null, photos)
-    }
-  })
+  {new: true, runValidators: true}).then(function (photos) { //console.log(photos)
+    callback(null, photos)
+  }).catch(next)
 }
 
 exports.statuschange = function (req, param, next, callback) { 
   var query = {'_id':param._id}
   Tickets.findByIdAndUpdate(query,{$set:{'status':param.status}},
-  {new: true}
-  ,function (err, status) { //console.log(status)
-    if (err) {
-      callback(err, status )
-    } else {
+  {new: true, runValidators: true}).then(function (status) { //console.log(status)
       req.body['status'] = status
       notification.ticketstatus(req,next,function(err,notification){ //email notification
          callback(null, status)
-      })     
-    }
-  })
+      }) 
+  }).catch(next)
 }

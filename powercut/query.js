@@ -16,14 +16,9 @@ exports.getAll = function (req,param, next, callback) {
 exports.statuschange = function (req,param, next, callback) {  
   var query = {'_id':param._id}
   Powercut.findByIdAndUpdate(query,{$set:{'status':param.status}},
-  {new: true}
-  ,function (err, powercut) { 
-    if (err) {
-      callback(err, powercut )
-    } else {
-      callback(null, powercut)
-    }
-  })
+  {new: true, runValidators: true}).then(function (powercut) { 
+    callback(null, powercut)
+  }).catch(next)
 }
 
 exports.ongoing = function (req,param, next, callback) {  

@@ -97,7 +97,10 @@ router.post('/status-change', function (req, res, next) {  //console.log(req.use
   MainTickets.ticketstatus(req, next, function (err, data) {
     if (err) {
       response(res, 400, err, [])
-    } else {
+    } else if (data == null) {
+      data = 'no record found'
+      response(res, 400, null, data)
+    }else {
       response(res, 200, null, data)
     }
   })

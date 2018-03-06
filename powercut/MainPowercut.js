@@ -12,7 +12,7 @@ exports.allpowercuts = function (req, next, callback) {
   })
 }
 
-exports.change = function (req, next, callback) {
+exports.change = function (req, next, callback) { 
   var status = JSON.stringify(req.body.status) 
   if(req.body.status &&  status.match(/[0,1,2]/)  && req.body._id){ 
       OperationalComands.change(req, next, function (err, powercut) {

@@ -22,42 +22,52 @@ passport.use('local-signup', new LocalStrategy({
 },
 function(req, email, password, done) {
 
-//console.log(req.body, email, password)
+// console.log(req.body, email, password)
     process.nextTick(function() {
 
-   req.checkBody('email','Invalid email').notEmpty().isEmail();
-   req.checkBody('password','Invalid password').notEmpty().isLength({min:8});
-   var errors = req.validationErrors();
-   if(errors){
-       var messages = [];
-       errors.forEach(function(error){
-           messages.push(errors.msg);
-       })
-       return done(errors,messages)
-   } 
-   
+    req.checkBody('email','Invalid email').notEmpty().isEmail();
+    req.checkBody('password','Minimum eight characters, at least one letter, one number and one special character')
+        .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/);
+    var errors = req.validationErrors();
+    if(errors){
+        var messages = [];
+        errors.forEach(function(error){
+            messages.push(errors.msg);
+        })
+        return done(errors,messages)
+    } 
+    
 
 
    var query = {$or: [{ 'google.email': email },{ 'facebook.email': email }]}
    Users.findOne(query, function(err, social) { //console.log("google",social)
     if(social){
-                              
-    var encruptPassword =   function () { 
-                            return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-                            };
-
-        Users.findOneAndUpdate(query,{$set:{ 'local.email':email,'local.password':encruptPassword(password) }},{new: true}
-        , function(err, newUser){
-            if(err){
-                return done(err)
+        Users.findOne({ 'local.email' :  email }, function(err, user) {
+            if(user){
+// console.log(user)
+            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             }else{
-                return done(null, newUser);
+                var encruptPassword =   function () { 
+                                        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                                        };
+
+                Users.findOneAndUpdate(query,{$set:{ 'local.email':email,'local.password':encruptPassword(password) }},{new: true}
+                , function(err, newUser){
+                    if(err){
+                        return done(err)
+                    }else{
+                        return done(null, newUser);
+                    }
+                })   
             }
-            })        
+        
+        
+        })            
+         
     }else{
             Users.findOne({ 'local.email' :  email }, function(err, user) {
                     // console.log(email, password);
-                    console.log(user)
+                    //console.log(user)
                     if (err)
                         return done(err);
 
@@ -103,19 +113,14 @@ function(req, email, password, done) {
         errors.forEach(function(error){
             messages.push(errors.msg);
         })
-        return done("errors",messages)
-    } 
-    
-    Users.findOne({ 'local.email' :  email }, function(err, user) {
-        
+        return done(errors,messages)
+    }    
+    Users.findOne({ 'local.email' :  email }, function(err, user) { //console.log(user)      
         if (err)
-            return done(err);
-
-        
+            return done(err);   
         if (!user) 
              return done(null, false, req.flash('loginMessage', 'No user found.')); 
-            //return done(null,'no user found')
-              
+            //return done(null,'no user found')             
         if (!user.validPassword(password))
              return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); 
             //return done(null,'wrong password')
@@ -123,6 +128,5 @@ function(req, email, password, done) {
             //return successful user
         return done(null, user);
     });
-
 }));
 

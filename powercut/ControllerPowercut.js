@@ -44,6 +44,8 @@ router.post('/change-status', function (req, res, next) {
   MainPowercut.change(req, next, function (err, data) { 
     if (err) {
       response(res, 400, err, [])
+    } else if(data == "please provide valid details"){
+     response(res, 400, err, data)
     } else if(data == null){
        data = 'no details found'
       response(res, 400, err, data)
