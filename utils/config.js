@@ -10,7 +10,3 @@ exports.facebookAuth = {
     'clientSecret'  : '94eec3d785ac88008939d5e93ddb3cac',
     'callbackURL'   : 'http://localhost:3000/user/auth/facebook/redirect'
 }
-
-exports.session = {
-    cookieKey : 'howareyou'
-}

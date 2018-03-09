@@ -115,12 +115,12 @@ var UsersLocalSchema = new Schema({
   password: {
     type: String,
     // required: [true, 'password is required'],
-    minlength: 8,
-    // maxlength: 15,
+    // minlength: 8,
+    maxlength: 15,
     validate: {
       validator: function (v) { 
         //Minimum eight characters, at least one letter, one number and one special character:
-        return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(v) 
+        return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/.test(v) 
       },
       message: 'Not a valid password!'
     }
@@ -138,82 +138,82 @@ var UsersLocalSchema = new Schema({
 //user schema
 var UsersSchema = new Schema({
   
-  account: {
-    type: String,
-    // index: {unique: true,sparse: true},
-    required: [true, 'username is required'],
-    minlength: 5,
-    maxlength: 10,
-    validate: {
-      validator: function (v) {
-        return /^[A-Za-z]+(?:[-._A-Za-z0-9]+)*$/.test(v) //ex: xyz_50,xyz-51,xyz.aa
-      },
-      message: '{VALUE} is not a valid username!'
-    }
-  },
-  firstname: {
-    type: String,
-    required: [true, 'firstname is required'],
-    minlength: 1,
-    maxlength: 15,
-  },
-  lastname: {
-    type: String,
-    maxlength: 10,
-  },
-  email: {
-    type: String,
-    required: [true, 'email is required'],
-    minlength: 5,
-    maxlength: 20,
-  },
-  mobileno: {
-    type: String,
-    // index: {unique: true},
-    required: [true, 'mobileno is required'],
-    validate: {
-      validator: function (v) {
-        return /^[0-9]{10}$/.test(v)
-      },
-      message: '{VALUE} is not a valid mobile number!'
-    }
-  },
+  // account: {
+  //   type: String,
+  //   // index: {unique: true,sparse: true},
+  //   required: [true, 'username is required'],
+  //   minlength: 5,
+  //   maxlength: 10,
+  //   validate: {
+  //     validator: function (v) {
+  //       return /^[A-Za-z]+(?:[-._A-Za-z0-9]+)*$/.test(v) //ex: xyz_50,xyz-51,xyz.aa
+  //     },
+  //     message: '{VALUE} is not a valid username!'
+  //   }
+  // },
+  // firstname: {
+  //   type: String,
+  //   required: [true, 'firstname is required'],
+  //   minlength: 1,
+  //   maxlength: 15,
+  // },
+  // lastname: {
+  //   type: String,
+  //   maxlength: 10,
+  // },
+  // email: {
+  //   type: String,
+  //   required: [true, 'email is required'],
+  //   minlength: 5,
+  //   maxlength: 20,
+  // },
+  // mobileno: {
+  //   type: String,
+  //   // index: {unique: true},
+  //   required: [true, 'mobileno is required'],
+  //   validate: {
+  //     validator: function (v) {
+  //       return /^[0-9]{10}$/.test(v)
+  //     },
+  //     message: '{VALUE} is not a valid mobile number!'
+  //   }
+  // },
   createdAt : {
     type: Date,
     default: Date.now
   },
-  occupation: {
-    type: String,
-  },
-  state: {
-    type: String,
-    required: [true, 'state is required'],
-  },
-  discom: {
-    type: String,
-    required: [true, 'discom is required'],
-  },
-  city: {
-    type: String,
-    required: [true, 'city is required'],
-  },
-  powerFeeder: {
-    type: String,
-    required: [true, 'powerFeeder is required'],
-  },
-  pin: {
-    type: Number,
-    required: [true, 'pin is required'],
-  },
+  // occupation: {
+  //   type: String,
+  // },
+  // state: {
+  //   type: String,
+  //   required: [true, 'state is required'],
+  // },
+  // discom: {
+  //   type: String,
+  //   required: [true, 'discom is required'],
+  // },
+  // city: {
+  //   type: String,
+  //   required: [true, 'city is required'],
+  // },
+  // powerFeeder: {
+  //   type: String,
+  //   required: [true, 'powerFeeder is required'],
+  // },
+  // pin: {
+  //   type: Number,
+  //   required: [true, 'pin is required'],
+  // },
   gender: {
     type: String,
     enum:['male','female']
   },
-  notification: {
-    type: [String],
-    default : null,
-    enum:['sms','email','push notification']
-  },
+  // notification: {
+  //   type: [String],
+  //   default : null,
+  //   enum:['sms','email','push notification']
+  // },
   
   local  : UsersLocalSchema,
   google : UsersGoogleSchema,

@@ -32,7 +32,7 @@ function(req, email, password, done) {
     if(errors){
         var messages = [];
         errors.forEach(function(error){
-            messages.push(errors.msg);
+            messages.push(error.msg);
         })
         return done(errors,messages)
     } 
@@ -104,7 +104,7 @@ passport.use('local-login', new LocalStrategy({
     passwordField : 'password',
     passReqToCallback : true 
 },
-function(req, email, password, done) { 
+function(req, email, password, done) { //console.log(req.body, email, password)
     req.checkBody('email','Invalid email').notEmpty().isEmail();
     req.checkBody('password','Invalid password').notEmpty().isLength({min:8});
     var errors = req.validationErrors();
@@ -119,13 +119,12 @@ function(req, email, password, done) {
         if (err)
             return done(err);   
         if (!user) 
-             return done(null, false, req.flash('loginMessage', 'No user found.')); 
-            //return done(null,'no user found')             
+            console.log('No user found')
+            return done(null, false, req.flash('loginMessage', 'No user found.')); 
+                   
         if (!user.validPassword(password))
-             return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); 
-            //return done(null,'wrong password')
-            
-            //return successful user
+            console.log('Wrong password')
+            return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); 
         return done(null, user);
     });
 }));

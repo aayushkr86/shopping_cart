@@ -1,17 +1,5 @@
 var OperationalComands = require('./OperationalComands')
 
-exports.scheduledpowercutemail = function (req, next, callback) {
-  OperationalComands.scheduledpowercutemail(req, next, function (err, powercuts) {
-    callback(err, powercuts)
-  })
-}
-
-exports.ongoingpowercutemail = function (req, next, callback) {
-  OperationalComands.ongoingpowercutemail(req, next, function (err, powercuts) {
-    callback(err, powercuts)
-  })
-}
-
 exports.ticketcreate = function (req, next, callback) {
   OperationalComands.ticketcreate(req, next, function (err, powercuts) {
     callback(err, powercuts)

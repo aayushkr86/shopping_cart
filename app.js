@@ -11,26 +11,18 @@ var bodyParser = require('body-parser')
 var expressValidator = require('express-validator')
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session)
-// var cookieSession = require('cookie-session')
-// var MongoStore =  require('express-mongoose-store')(session, mongoose)
 
 //passport here is just declared,middleware is use in passport file
 var localPassportSetup = require('./passport/passport_local')
 var googlePassportSetup = require('./passport/passport_google')  
 var facebookPassportSetup = require('./passport/passport_facebook')
 var index = require('./routes/index')
-var keys = require('./utils/config')
 
-// app.use(cookieSession({
-//   maxAge: 24*60*60*1000,
-//   keys:[keys.session.cookieKey]
-// }));
-
-app.use(expressValidator()) //ex:req.checkBody
+app.use(expressValidator()) //used in req.checkBody
 
 // mongoose connection
 var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/electricityapp')
+mongoose.connect('mongodb://localhost/shopping')
 mongoose.Promise = global.Promise // ES6 Promises
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
@@ -48,12 +40,12 @@ app.set('view engine', 'ejs')
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({
   secret: 'work hard',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie:{ maxAge: 180 * 60 * 1000},       //180 mins
   store: new MongoStore({mongooseConnection: db})
 }));
@@ -63,7 +55,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(function(req, res, next){
-  res.locals.login = req.isAuthenticated();
+  res.locals.login = req.isAuthenticated(); //variable available in all views ('login' is the name of the variable)
   res.locals.session = req.session;
   next();
 })
@@ -93,7 +85,10 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.render('error',{
+    message: err.message,
+    error: {}
+  })
 })
 
 module.exports = app

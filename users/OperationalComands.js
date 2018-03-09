@@ -12,35 +12,6 @@ exports.getallusers = function (req, next, callback) {
   })
 }
 
-exports.signup = function (req, next, callback) {  
-  var param = {
-    'username' : req.body.username,
-    'firstname': req.body.firstname,
-    'middlename' : req.body.middlename,
-    'lastname': req.body.lastname,
-    'email': req.body.email,
-    'mobileno': req.body.mobileno,
-    'password' :req.body.password, 
-    'occupation': req.body.occupation,
-    'city': req.body.city,
-    'pin': req.body.pin,
-  }
-  query.create(req, param, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
-exports.loginuser = function (req, next, callback) {
-  var param = {
-    'username' : req.body.username,
-    'email': req.body.email,
-    'password' :req.body.password, 
-  }
-  query.login(req, param, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
 exports.profileview = function (req, next, callback) { 
   
   var param = req.user
@@ -49,36 +20,6 @@ exports.profileview = function (req, next, callback) {
     callback(err, users)
   })
 }
-
-exports.logout = function (req, next, callback) { 
-  if (req.session) {
-    req.session.regenerate(function (err) {
-      if (err) {
-        next(err);
-      } else {
-        callback(err, "loged out")  
-      }
-    });
-  }   
-}
-//old
-// exports.updateuser = function (req, next, callback) {  
-//   var param = {
-//     'username' : req.body.username,
-//     'firstname': req.body.firstname,
-//     'middlename' : req.body.middlename,
-//     'lastname': req.body.lastname,
-//     'email': req.body.email,
-//     'mobileno': req.body.mobileno,
-//     'password' :req.body.password, 
-//     'occupation': req.body.occupation,
-//     'city': req.body.city,
-//     'pin': req.body.pin,
-//   }
-//   query.update(param, next, function (err, users) {
-//     callback(err, users)
-//   })
-// }
 
 exports.updateuser = function (req, next, callback) {  
   var param = {
@@ -96,7 +37,7 @@ exports.updateuser = function (req, next, callback) {
     'gender': req.body.gender,
     'notification': req.body.notification
   }
-  query.update(param, next, function (err, users) {
+  query.update(req, param, next, function (err, users) {
     callback(err, users)
   })
 }
@@ -171,9 +112,9 @@ exports.checkreset =function (req,next,callback) { //console.log(req.params.toke
 //reset password 
 exports.resetpassword =function (req,next,callback) { //console.log(req.params.token)
 
-function encruptPassword (password) { 
-return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+  function encruptPassword (password) { 
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  };
 
   async.waterfall([
     function(done){

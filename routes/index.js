@@ -1,10 +1,13 @@
 var express = require('express')
 var router = express.Router()
+var passloginvalidator = require('../passport/pass_loginvalidator')
 var users = require('../users/index')
 var tickets = require('../tickets/index')
-var powercut = require('../powercut/index')
 var notification = require('../notification/index')
-var passloginvalidator = require('../passport/pass_loginvalidator')
+var products = require('../products/index')
+var cart = require('../cart/index')
+var coupons = require('../coupons/index')
+
 
 module.exports = router
 
@@ -15,8 +18,10 @@ router.get('/', function (req, res, next) {
 
 router.use('/user', users)                                      // user microservice
 router.use('/tickets',passloginvalidator.isLoggedIn, tickets)   // tickets microservice
-router.use('/powercut', powercut)                               // powercut microservice
 router.use('/notification', notification)                       // notification microservice
+router.use('/products', products)                               // product microservice
+router.use('/cart', cart)                                       // cart microservice
+router.use('/coupons', coupons)                                 // coupons microservice
 
 // error handler
 router.use(function (err, req, res, next) {

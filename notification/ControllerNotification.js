@@ -18,28 +18,6 @@ function response (res,statuscode,err,data) {
   res.status(statuscode).json({ "message": data });
 }
 
-// send scheduled powercut email notification
-router.post('/send-scheduled-powercut-email', function (req, res, next) {
-  MainNotification.scheduledpowercutemail(req, next, function (err, data) {
-    if (err) {
-      response(res, 400, err, [])
-    } else {
-      response(res, 200, null, data)
-    }
-  })
-})
-
-// send ongoing powercut email notification
-router.post('/send-ongoing-powercut-email', function (req, res, next) {
-  MainNotification.ongoingpowercutemail(req, next, function (err, data) {
-    if (err) {
-      response(res, 400, err, [])
-    } else {
-      response(res, 200, null, data)
-    }
-  })
-})
-
 // send ticket create email notification
 router.post('/send-ticket-create-email-notification', function (req, res, next) {
   MainNotification.ticketcreate(req, next, function (err, data) {

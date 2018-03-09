@@ -6,31 +6,16 @@ exports.getallusers = function (req, next, callback) {
     })
 }
 
-exports.signup = function (req, next, callback) {
-    OperationalComands.signup(req, next, function (err, users) {
-      callback(err, users)
-    })
-}
-
-exports.loginuser = function (req, next, callback) {
-  OperationalComands.loginuser(req, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
 exports.profileview = function (req, next, callback) {
   OperationalComands.profileview(req, next, function (err, users) {
     callback(err, users)
   })
 }
 
-exports.logout = function (req, next, callback) {
-  OperationalComands.logout(req, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
-exports.updateuser = function (req, next, callback) {
+exports.updateuser = function (req, next, callback) { //console.log(req.user.email)
+  if(req.user.email != req.body.email){ //check if same user is logged in
+    return callback(true, null)
+  }
   OperationalComands.updateuser(req, next, function (err, users) {
     callback(err, users)
   })
