@@ -52,15 +52,6 @@ exports.isuser =function (req,next,callback) {
   })
 }
 
-exports.feederlist =function (req,next,callback) { //console.log(req.body)
-  var param = {
-        "powerFeeder":req.body.feeder
-  }
-  query.feederlist(param,next, function (err, users) {
-    callback(err, users)
-  })
-}
-
 //forgot password
 exports.forgot =function (req,next,callback) { //console.log(req.body)
   var param = {

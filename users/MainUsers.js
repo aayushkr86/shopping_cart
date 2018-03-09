@@ -27,12 +27,6 @@ exports.isuser = function (req, next, callback) {
   })
 }
 
-exports.feederlist = function (req, next, callback) {
-  OperationalComands.feederlist(req, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
 exports.forgot = function (req, next, callback) {
   OperationalComands.forgot(req, next, function (err, users) {
     callback(err, users)

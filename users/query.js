@@ -46,22 +46,10 @@ exports.update = function (req,param, next, callback) { //console.log(param)
 })
 }
 
-
 exports.isuser = function (param, next, callback) { 
   var query = {$or: [{ 'google.email': param.email },{ 'facebook.email': param.email },{ 'local.email': param.email }]}
   Users.findOne(query).then( function (users) { 
       callback(null, users)
-  }).catch(next)
-}
-
-exports.feederlist = function (param, next, callback) { //console.log(param)
-  var query = {"powerFeeder":param.powerFeeder}
-  Users.find(query , function (err, users) { //console.log(users)
-    if (err) {
-      callback(err, users)
-    } else {
-      callback(null, users)
-    }
   }).catch(next)
 }
 

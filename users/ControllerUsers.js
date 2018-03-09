@@ -115,20 +115,6 @@ router.post('/is-user', function (req, res, next) {
   })
 })
 
-//feeder list
-router.post('/feeder-list', function (req, res, next) { 
-  MainUsers.feederlist(req, next, function (err, data) {     
-    if (err) { console.log(err)
-      response(res, 400, err, {})
-    } else if (data == null || data.length == 0 ) {
-      data = "no user found"
-      response(res, 400, null, data)
-    } else { 
-      response(res, 200, null, data)
-    }
-  })
-})
-
 //forgot password
 router.post('/forgot-password', passloginvalidator.notLoggedIn, function (req, res, next) {
   MainUsers.forgot(req, next, function (err, data) {    //console.log(err,data)     

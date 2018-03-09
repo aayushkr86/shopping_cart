@@ -69,14 +69,12 @@ function(req, email, password, done) {
                     // console.log(email, password);
                     //console.log(user)
                     if (err)
-                        return done(err);
-
-                    
+                        return done(err);                   
                     if (user) {
                         //return done(null,'That email is already taken.');
-                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                    } else {
-                        
+                        console.log('That email is already taken.')
+                        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                    } else { 
                         var newUser            = new Users();
                         newUser.local ={};
                         newUser.local.email    = email;
@@ -115,16 +113,18 @@ function(req, email, password, done) { //console.log(req.body, email, password)
         })
         return done(errors,messages)
     }    
-    Users.findOne({ 'local.email' :  email }, function(err, user) { //console.log(user)      
-        if (err)
-            return done(err);   
-        if (!user) 
-            console.log('No user found')
+    Users.findOne({ 'local.email' :  email }, function(err, user) { //console.log(err,user)       
+        if (err) {
+            return done(err);     
+        }    
+        else if (!user) {
+             console.log('No user found')
             return done(null, false, req.flash('loginMessage', 'No user found.')); 
-                   
-        if (!user.validPassword(password))
-            console.log('Wrong password')
+        }     
+        else if (!user.validPassword(password)) {
+             console.log('Wrong password')
             return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); 
+        }        
         return done(null, user);
     });
 }));

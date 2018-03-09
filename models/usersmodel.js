@@ -244,11 +244,11 @@ UsersSchema.pre('save', function (next) {
 });
 
 
-UsersSchema.methods.generateHash = function(password) { console.log('psssword',this)
+UsersSchema.methods.generateHash = function(password) { //console.log('psssword',this)
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-UsersSchema.methods.validPassword = function(password) {
+UsersSchema.methods.validPassword = function(password) { console.log(password)
   return bcrypt.compareSync(password, this.local.password);
 };
 

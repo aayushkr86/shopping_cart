@@ -44,8 +44,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({
   secret: 'work hard',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie:{ maxAge: 180 * 60 * 1000},       //180 mins
   store: new MongoStore({mongooseConnection: db})
 }));
