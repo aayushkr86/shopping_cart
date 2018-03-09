@@ -1,28 +1,18 @@
 var mongoose = require('mongoose')
 var bcrypt = require('bcrypt')
 var Schema = mongoose.Schema
-// var ObjectId = Schema.ObjectId
-// var SchemaTypes = mongoose.Schema.Types
-// require('mongoose-long')(mongoose)
-
 require('mongoose-type-email')
 
 // Google Schema
 var UsersGoogleSchema = new Schema({  
   id: {
-    type: String,
-    // index: {unique: true},
-    // required: [true, 'id is required']    
+    type: String
   },
   displayName: {
-    type: String,
-    required: [true, 'displayName is required'],
-    minlength: 1
+    type: String
   },
   firstname: {
     type: String,
-    required: [true, 'firstname is required'],
-    minlength: 1,
     maxlength: 15,
   },
   lastname: {
@@ -50,29 +40,21 @@ var UsersGoogleSchema = new Schema({
   },
   provider: {
     type: String,
-    enum:['google']
+    default : 'google',
+    enum: ['google']
   },
 })
-
-
 
 //Facebook schema
 var UsersFbSchema = new Schema({  
   id: {
     type: String,
-    // index: {unique: true}
-    required: [true, 'id is required']    
   },
   displayName: {
     type: String,
-    required: [true, 'displayName is required'],
-    minlength: 1
   },
   firstname: {
     type: String,
-    required: [true, 'firstname is required'],
-    minlength: 1,
-    maxlength: 15,
   },
   lastname: {
     type: String,
@@ -80,10 +62,8 @@ var UsersFbSchema = new Schema({
   },
   email: {
     type: mongoose.SchemaTypes.Email,
-    // index: {unique: true},
     minlength: 5,
     maxlength: 30,
-    // required: [true, 'email is required']
   },
   photos: {
     type: String,
@@ -101,11 +81,12 @@ var UsersFbSchema = new Schema({
   },
   provider: {
     type: String,
+    default : 'facebook',
     enum:['facebook']
   }
 })
 
-
+//local schema
 var UsersLocalSchema = new Schema({  
   email: {
     type: String,
@@ -114,8 +95,6 @@ var UsersLocalSchema = new Schema({
   },
   password: {
     type: String,
-    // required: [true, 'password is required'],
-    // minlength: 8,
     maxlength: 15,
     validate: {
       validator: function (v) { 
@@ -131,106 +110,63 @@ var UsersLocalSchema = new Schema({
   },
 })
 
-
-
-
-
 //user schema
 var UsersSchema = new Schema({
-  
-  // account: {
-  //   type: String,
-  //   // index: {unique: true,sparse: true},
-  //   required: [true, 'username is required'],
-  //   minlength: 5,
-  //   maxlength: 10,
-  //   validate: {
-  //     validator: function (v) {
-  //       return /^[A-Za-z]+(?:[-._A-Za-z0-9]+)*$/.test(v) //ex: xyz_50,xyz-51,xyz.aa
-  //     },
-  //     message: '{VALUE} is not a valid username!'
-  //   }
-  // },
-  // firstname: {
-  //   type: String,
-  //   required: [true, 'firstname is required'],
-  //   minlength: 1,
-  //   maxlength: 15,
-  // },
-  // lastname: {
-  //   type: String,
-  //   maxlength: 10,
-  // },
-  // email: {
-  //   type: String,
-  //   required: [true, 'email is required'],
-  //   minlength: 5,
-  //   maxlength: 20,
-  // },
-  // mobileno: {
-  //   type: String,
-  //   // index: {unique: true},
-  //   required: [true, 'mobileno is required'],
-  //   validate: {
-  //     validator: function (v) {
-  //       return /^[0-9]{10}$/.test(v)
-  //     },
-  //     message: '{VALUE} is not a valid mobile number!'
-  //   }
-  // },
-  createdAt : {
-    type: Date,
-    default: Date.now
-  },
-  // occupation: {
-  //   type: String,
-  // },
-  // state: {
-  //   type: String,
-  //   required: [true, 'state is required'],
-  // },
-  // discom: {
-  //   type: String,
-  //   required: [true, 'discom is required'],
-  // },
-  // city: {
-  //   type: String,
-  //   required: [true, 'city is required'],
-  // },
-  // powerFeeder: {
-  //   type: String,
-  //   required: [true, 'powerFeeder is required'],
-  // },
-  // pin: {
-  //   type: Number,
-  //   required: [true, 'pin is required'],
-  // },
-  gender: {
-    type: String,
-    enum:['male','female']
-  },
-  // notification: {
-  //   type: [String],
-  //   default : null,
-  //   enum:['sms','email','push notification']
-  // },
-  
+   
   local  : UsersLocalSchema,
   google : UsersGoogleSchema,
   facebook : UsersFbSchema,
 
+  firstname: {
+    type: String,
+    minlength: 1,
+    maxlength: 15,
+  },
+  lastname: {
+    type: String,
+    maxlength: 10,
+  },
+  email: {
+    type: String,
+    minlength: 5,
+    maxlength: 20,
+  },
+  mobileno: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return /^[0-9]{10}$/.test(v)
+      },
+      message: '{VALUE} is not a valid mobile number!'
+    }
+  },
+  state: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  pin: {
+    type: Number,
+  },
+  gender: {
+    type: String,
+    enum:['male','female']
+  },
+  createdAt : {
+    type: Date,
+    default: Date.now
+  },
   resetPasswordToken: {
     type: String
   },
   resetPasswordExpires: {
     type: Date
   }
-  
 });
 
-
 UsersSchema.pre('save', function (next) {
-  var user = this; console.log("this",user)
+  var user = this; 
   if(user.local == undefined){
     next();
   }
@@ -243,12 +179,7 @@ UsersSchema.pre('save', function (next) {
     })
 });
 
-
-UsersSchema.methods.generateHash = function(password) { //console.log('psssword',this)
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
-
-UsersSchema.methods.validPassword = function(password) { console.log(password)
+UsersSchema.methods.validPassword = function(password) { //console.log(password)
   return bcrypt.compareSync(password, this.local.password);
 };
 

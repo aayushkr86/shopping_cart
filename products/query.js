@@ -15,15 +15,15 @@ exports.picupload = function (param, next, callback) {
 //add products
 exports.addproducts = function (param, next, callback) {
   Products.create(param).then(function (products) { 
-      callback(null, products)
-    }).catch(next)
+    callback(null, products)
+  }).catch(next)
 }
 
 //all products
 exports.allproducts = function (param, next, callback) {
   Products.find(param).then(function (products) { 
-      callback(null, products)
-    }).catch(next)
+    callback(null, products)
+  }).catch(next)
 }
 
 //is products

@@ -2,7 +2,7 @@ var query = require('./query')
 var ObjectId = require('mongodb').ObjectID
 
 //pic upload
-exports.picupload = function (req, next, callback) { console.log(req.body)
+exports.picupload = function (req, next, callback) { //console.log(req.body)
   var param = {
     '_id' : req.body._id,
     'photos' :req.file.path

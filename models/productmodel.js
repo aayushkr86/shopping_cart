@@ -39,7 +39,7 @@ var ProductsSchema = new Schema({
     },
     categories: {
         type: String,
-        default: '',
+        default: null
     },
     createdAt : {
         type: Date,

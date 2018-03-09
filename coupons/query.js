@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectID
 //is coupon
 exports.iscoupon = function (param, next, callback) {
   Coupons.findOne(param).then(function (coupon) { //console.log(coupon)
-    if(coupon == null){
+    if(coupon == null || coupon.length == 0 ){
       return  callback(true ,"no coupon found")
     }
       callback(false, coupon)

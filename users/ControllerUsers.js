@@ -33,8 +33,7 @@ router.get('/user-list', function (req, res, next) {
 
 //update profile api
 router.post('/update-profile',passloginvalidator.isLoggedIn, function (req, res, next) {       
-  MainUsers.updateuser(req, next, function (err, data) {
-    // console.log(err, data)
+  MainUsers.updateuser(req, next, function (err, data) { // console.log(err, data)
     if (err && data) {
       response(res, 400, err, data)
     } 
@@ -49,8 +48,6 @@ router.post('/update-profile',passloginvalidator.isLoggedIn, function (req, res,
 
 // current profile api (after registering)
 router.get('/profile', passloginvalidator.isLoggedIn, function (req, res, next) {     
-  // console.log(req.session) 
-  //console.log(req.user)
   MainUsers.profileview(req, next, function (err, data) {
     if (err) {
       response(res, 400, err, data)

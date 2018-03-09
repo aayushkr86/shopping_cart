@@ -23,19 +23,14 @@ exports.profileview = function (req, next, callback) {
 
 exports.updateuser = function (req, next, callback) {  
   var param = {
-    'account' : req.body.account,
     'firstname': req.body.firstname,
     'lastname': req.body.lastname,
     'email': req.body.email,
     'mobileno': req.body.mobileno,
-    'occupation': req.body.occupation,
     'state': req.body.state,
-    'discom': req.body.discom,
     'city': req.body.city,
-    'powerFeeder': req.body.powerFeeder,
     'pin': req.body.pin,
     'gender': req.body.gender,
-    'notification': req.body.notification
   }
   query.update(req, param, next, function (err, users) {
     callback(err, users)

@@ -23,27 +23,18 @@ exports.view = function (param, next, callback) {
 }
 
 exports.update = function (req,param, next, callback) { //console.log(param)
-   //console.log(req.user)
-  Users.findOne({'account':  param.account}).exec(function (err,account) {  //console.log(account.account)
-    if(account == null || account.account == req.user.account){ 
+  Users.findOne({'mobileno': param.mobileno}).exec(function (err,mobileno) {
+    if(mobileno == null || (mobileno.mobileno == req.user.mobileno)) {
+      var query = {$or: [{ 'google.email': param.email },{ 'facebook.email': param.email },{ 'local.email':param.email }]}
+      Users.findOneAndUpdate(query,{$set:param}
+        ,{new: true, runValidators: true}).then(function (users) { //console.log(users)
+          callback(null, users)
+      }).catch(next)
 
-      Users.findOne({'mobileno': param.mobileno}).exec(function (err,mobileno) {
-        if(mobileno == null || mobileno.mobileno == req.user.mobileno){
-
-          var query = {$or: [{ 'google.email': param.email },{ 'facebook.email': param.email },{ 'local.email':param.email }]}
-          Users.findOneAndUpdate(query,{$set:param}
-            ,{new: true, runValidators: true}).then(function (users) { //console.log(users)
-              callback(null, users)
-          }).catch(next)
-
-        }else{
-          callback(true, "mobileno. already taken")
-        }
-      })       
     }else{
-      callback(true, "accountno. already taken")
-    }                          
-})
+      callback(true, "mobileno. already taken")
+    }
+})                              
 }
 
 exports.isuser = function (param, next, callback) { 
