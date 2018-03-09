@@ -64,3 +64,27 @@ exports.placeCodorder = function (req, next, callback) { //console.log(req.body)
   callback(err, order)
   })
 }
+
+exports.reduceone = function (req, next, callback) {  //console.log(req.session.cart)
+  var cart = new Cart(req.session.cart)
+
+  var product_id = req.params.product_id;
+  
+  cart.reduceByOne(product_id)// console.log(cart)
+      
+      req.session.cart = cart;
+
+      callback(false,cart)
+}
+
+exports.remove = function (req, next, callback) {  //console.log(req.session.cart)
+  var cart = new Cart(req.session.cart)
+
+  var product_id = req.params.product_id;
+  
+  cart.removeItem(product_id)// console.log(cart)
+      
+      req.session.cart = cart;
+      // req.session.cart = null;
+      callback(false,cart)
+}

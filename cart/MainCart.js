@@ -32,3 +32,22 @@ exports.placeCodorder = function (req, next, callback) {
     callback(err, order)
   })
 }
+
+exports.reduceone = function (req, next, callback) {
+  if(!req.session.cart){
+  return callback(true, "no item found in cart")
+  }
+  OperationalComands.reduceone(req, next, function (err, cart) {
+    callback(err, cart)
+  })
+}
+
+exports.remove = function (req, next, callback) {
+  if(!req.session.cart){
+  return callback(true, "no item found in cart")
+  }
+  OperationalComands.remove(req, next, function (err, cart) {
+    callback(err, cart)
+  })
+}
+

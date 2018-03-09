@@ -78,3 +78,33 @@ router.post('/place-order-cod', passloginvalidator.isLoggedIn, function(req, res
     }
   })
 })
+
+//reduce one product from cart
+router.get('/reduce/:product_id',function(req,res,next){
+  MainCart.reduceone(req, next, function (err, data) {
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
+
+//remove all particular product from cart
+router.get('/remove/:product_id',function(req,res,next){
+  MainCart.remove(req, next, function (err, data) {
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
