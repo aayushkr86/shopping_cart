@@ -263,19 +263,32 @@ exports.codorderPlaced = function (req, next, callback) { console.log(req.body)
             line : {
                 quantity : req.body.order.cart.totalQty,
                 // title    : req.body.order.cart.totalitems[Object.keys(totalitems)[0]].item.title,
+                // title : 
                 
-                price    :  req.body.order.cart.totalPrice
+                // price    :  req.body.order.cart.totalPrice
             },
-            date : "03/03/18/",
-            subtotal_price : "100",
+            date : req.body.order.createdAt,
+
+            subtotal_price : req.body.order.cart.totalPrice,
             shipping_price : "40",
-            discounts_savings : "50",
+            discounts_savings : req.body.order.cart.coupon.discount,
             tax_line : {
                 title : "gst",
                 price : "18%"
             },
-            total_price : "140"
+            total_price :" subtotal_price + shipping_price"
         };
+
+
+        // var replacements = new Object();
+        // replacements.subtotal_price =  req.body.order.cart.totalPrice + (req.body.order.cart.totalPrice * .18);
+        // replacements.total_price = replacements.subtotal_price + replacements.shipping_price
+        // replacements.shop.url = "https://upload.wikimedia.org/wikipedia/en/5/5e/Gothiccover.png"
+        // replacements.shop.name = "Tiny Qwl",
+        // replacements.shop.email = "tinyqwl@gmail.com"
+
+
+
         var htmlToSend = template(replacements);
         var mailOptions = {
             subject : 'Order confirmation',

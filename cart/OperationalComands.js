@@ -36,27 +36,41 @@ exports.shoppingcart = function (req, next, callback) {
 exports.checkout = function (req, next, callback) {   //console.log(req.body.code)
     var cart = new Cart(req.session.cart)
     totalPrice = cart.totalPrice
-    //console.log(totalPrice)
+    // console.log(totalPrice)
     var param = {
       "code" : req.body.code
     } 
-    query.checkcoupon(req, param, next, function (err, coupon) { //console.log(err,coupon)
-      if(err){
-        coupon_code = "Invalid Coupon"
-        return callback(true, details={totalPrice, coupon_code})
+    query.checkcoupon(req, param, next, function (err, iscoupon) { //console.log(err,iscoupon)
+      if(err) {
+        coupon = {
+          "code" : "Not applied",
+          "discount" : 0
+        } 
+        return callback(true, details={totalPrice, coupon})
       }
-
-    totalPrice = totalPrice - coupon.discount
-    coupon_code = "Coupon Applied"
-    callback(false, details={totalPrice, coupon_code})
+      if(req.session.cart.coupon.code != "Coupon Applied") { //console.log('im here')
+        totalPrice = totalPrice - iscoupon.discount  //minus discount
+        cart.totalPrice = totalPrice
+        req.session.cart.totalPrice = totalPrice  
+        coupon = {
+          "code" : "Coupon Applied",
+          "discount" : iscoupon.discount
+        }
+        cart.coupon = coupon 
+        req.session.cart.coupon = coupon
+        // console.log(req.session.cart)
+        return callback(false, details={totalPrice, coupon})
+      }
+      coupon = req.session.cart.coupon
+    callback(false, details={totalPrice, coupon})
     })
 }
 
 exports.placeCodorder = function (req, next, callback) { //console.log(req.body)
-  var cart = new Cart(req.session.cart)
+  // var cart = new Cart(req.session.cart)
   var param = {
     'user'    : req.user,
-    'cart'    : cart,
+    'cart'    : req.session.cart,
     'name'    : req.body.name,
     'billing_address' : {
       'name'    : req.body.billing_address.name,

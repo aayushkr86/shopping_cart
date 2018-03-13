@@ -3,8 +3,16 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
     this.totalitems = oldcart.totalitems || {}
     this.totalQty   = oldcart.totalQty   || 0
     this.totalPrice = oldcart.totalPrice || 0
+    this.coupon = {
+        code : "Not applied",
+        discount : 0
+    };
+    this.shipping = {
+        status : "Not applied",
+        amount : 0
+    };
     
-    this.add = function(item,id){   //console.log(item,id)
+    this.add = function(item,id) {   //console.log(item,id)
        
         var storedItem = this.totalitems[id];  // valid if item is already present in session
         if(storedItem == undefined){ 
@@ -41,7 +49,7 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
         this.totalQty--;
         this.totalPrice = this.totalPrice - this.totalitems[id].item.price;
 
-        if(this.totalitems[id].qty < 1){ 
+        if(this.totalitems[id].qty < 1) { 
             delete this.totalitems[id];
         }
     }

@@ -19,8 +19,18 @@ exports.checkout = function (req, next, callback) {
   if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
+
   OperationalComands.checkout(req, next, function (err, cart) {
-    callback(err, cart)
+    //console.log(req.session.cart)
+  // console.log(cart.totalPrice)
+  if(cart.totalPrice < 300  && req.session.cart.shipping.status != "Applied") {            //shipping charge
+    req.session.cart['shipping'] = { 
+                                    status : "Applied",
+                                    amount : 40
+                                    };
+    req.session.cart.totalPrice  = cart.totalPrice + 40;
+  }
+    callback(err, req.session.cart)
   })
 }
 
