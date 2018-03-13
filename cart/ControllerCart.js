@@ -6,7 +6,7 @@ var passloginvalidator = require('../passport/pass_loginvalidator')
 module.exports = router
 
 // response handler
-function response (res,statuscode,err,data) {
+function response (res, statuscode, err, data) {
   if (statuscode === 200) {
     var data = data;
   }else if(statuscode === 400){
@@ -20,7 +20,7 @@ function response (res,statuscode,err,data) {
 }
 
 //add product to cart
-router.get('/add-to-cart/:product_id',function(req,res,next){
+router.get('/add-to-cart/:product_id',function(req, res, next) {
   MainCart.addtocart(req, next, function (err, data) {
     if (err && data) {
       response(res, 400, err, data)
@@ -80,7 +80,7 @@ router.post('/place-order-cod', passloginvalidator.isLoggedIn, function(req, res
 })
 
 //reduce one product from cart
-router.get('/reduce/:product_id',function(req,res,next){
+router.get('/reduce/:product_id',function(req, res, next) {
   MainCart.reduceone(req, next, function (err, data) {
     if (err && data) {
       response(res, 400, err, data)
@@ -95,8 +95,24 @@ router.get('/reduce/:product_id',function(req,res,next){
 })
 
 //remove all particular product from cart
-router.get('/remove/:product_id',function(req,res,next){
+router.get('/remove/:product_id',function(req, res, next) { 
   MainCart.remove(req, next, function (err, data) {
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
+
+//change order status
+router.post('/change-order-status', //passloginvalidator.isLoggedIn, admin should be loggedin
+function(req, res, next) {
+  MainCart.changestatus(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)
     } 

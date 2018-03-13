@@ -3,7 +3,6 @@ var Schema = mongoose.Schema
 require('mongoose-type-email')
 
 var CouponsSchema = new Schema({
- 
     code: {
         type:String,
         required: true,
@@ -20,16 +19,16 @@ var CouponsSchema = new Schema({
         min: 1,
         required: true
     },
-    status:{
+    status: {
         type: String,
         enum: ["active", "expired"],
         default: "active",
         // required: true,
     },
-    expiry : {
+    expiry: {
         type: Date,
     }, 
-    createdAt : {
+    createdAt: {
         type: Date,
         default: Date.now
     }  

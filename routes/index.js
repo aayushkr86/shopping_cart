@@ -21,7 +21,7 @@ router.use('/user', users)                                      // user microser
 router.use('/tickets',passloginvalidator.isLoggedIn, tickets)   // tickets microservice
 router.use('/notification', notification)                       // notification microservice
 router.use('/products', products)                               // product microservice
-router.use('/cart', cart)                                       // cart microservice
+router.use('/cart', cart)                                       // cart/order microservice
 router.use('/coupons', coupons)                                 // coupons microservice
 router.use('/category', category)                               // category microservice
 

@@ -57,8 +57,23 @@ exports.placeCodorder = function (req, next, callback) { //console.log(req.body)
   var param = {
     'user'    : req.user,
     'cart'    : cart,
-    'address' : req.body.address,
-    'name'    : req.body.name
+    'name'    : req.body.name,
+    'billing_address' : {
+      'name'    : req.body.billing_address.name,
+      'street'  : req.body.billing_address.street,
+      'city'    : req.body.billing_address.city,
+      'state'   : req.body.billing_address.state,
+      'pin'     : req.body.billing_address.pin,
+      'country' : req.body.billing_address.country,
+    },
+    'shipping_address' : {
+      'name'    : req.body.shipping_address.name,
+      'street'  : req.body.shipping_address.street,
+      'city'    : req.body.shipping_address.city,
+      'state'   : req.body.shipping_address.state,
+      'pin'     : req.body.shipping_address.pin,
+      'country' : req.body.shipping_address.country,
+    }, 
   }
   query.placeCodorder(req, param, next, function (err, order) {
   callback(err, order)
@@ -87,4 +102,14 @@ exports.remove = function (req, next, callback) {  //console.log(req.session.car
       req.session.cart = cart;
       // req.session.cart = null;
       callback(false,cart)
+}
+
+exports.changestatus = function (req, next, callback) { //console.log(req.body)
+  var param = {
+    '_id'    : ObjectId(req.body._id),
+    'status' : req.body.status
+  }
+  query.changestatus(req, param, next, function (err, status) {
+  callback(err, status)
+  })
 }

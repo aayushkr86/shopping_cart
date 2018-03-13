@@ -6,7 +6,12 @@ exports.googleAuth = {
 }
 
 exports.facebookAuth = {
-    'clientID'      : '825439267603825',
-    'clientSecret'  : '94eec3d785ac88008939d5e93ddb3cac',
+    'clientID'      : ' ',
+    'clientSecret'  : ' ',
     'callbackURL'   : 'http://localhost:3000/user/auth/facebook/redirect'
+}
+
+exports.gmail = {
+    'username' : 'aayushkr90@gmail.com',
+    'password' : 'Qwerty12345#'
 }

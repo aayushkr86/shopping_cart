@@ -32,7 +32,7 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
 
     this.reduceByOne = function(id) { //console.log(this.totalitems[id])
         //console.log(id)
-        if(this.totalitems[id] == undefined){
+        if(this.totalitems[id] == undefined) {
             return
         }
         this.totalitems[id].qty--;
@@ -48,7 +48,7 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
 
     this.removeItem = function(id) { //console.log(this.totalitems[id])
         //console.log(id)
-        if(this.totalitems[id] == undefined){
+        if(this.totalitems[id] == undefined) {
             return
         }
         this.totalPrice = this.totalPrice - this.totalitems[id].price

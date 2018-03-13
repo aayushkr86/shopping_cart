@@ -62,3 +62,14 @@ router.post('/confirm-password-change', function (req, res, next) {
     }
   })
 })
+
+// cod order placed email notification
+router.post('/cod-order-placed', function (req, res, next) {
+  MainNotification.codorderPlaced(req, next, function (err, data) { //console.log(err,data)
+    if (err) {
+      response(res, 400, err, [])
+    } else {
+      response(res, 200, null, data)
+    }
+  })
+})

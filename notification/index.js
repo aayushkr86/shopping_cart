@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
     ControllerNotification(req, res, next)
 }
 
-//ticket create email notification api
+// ticket create email notification api
 module.exports.ticketcreate = function (req, next, callback) {  //console.log(req.body)
     request({
       url: 'http://localhost:3000/notification/send-ticket-create-email-notification',
@@ -19,7 +19,7 @@ module.exports.ticketcreate = function (req, next, callback) {  //console.log(re
     });
   }
 
-//ticket status change email notification api
+// ticket status change email notification api
 module.exports.ticketstatus = function (req, next, callback) {  //console.log(req.body)
     request({
       url: 'http://localhost:3000/notification/send-ticket-status-change-email-notification',
@@ -33,7 +33,7 @@ module.exports.ticketstatus = function (req, next, callback) {  //console.log(re
     });
 }
 
-//forgot password email reset api
+// forgot password email reset api
 module.exports.forgotpassword = function (req, next, callback) {  //console.log(req.body)
   request({
     url: 'http://localhost:3000/notification/forgot-password',
@@ -47,7 +47,7 @@ module.exports.forgotpassword = function (req, next, callback) {  //console.log(
   });
 }
 
-//password change confirmation email 
+// password change confirmation email 
 module.exports.confirmchange = function (req, next, callback) {  //console.log(req.body)
   request({
     url: 'http://localhost:3000/notification/confirm-password-change',
@@ -58,5 +58,19 @@ module.exports.confirmchange = function (req, next, callback) {  //console.log(r
     }, function(err, confirm){ 
       //  console.log(err,confirm.body)
     callback(err, confirm.body.message)
+  });
+}
+
+// order placed email notification
+module.exports.codorderPlaced = function (req, next, callback) {  //console.log(req.body)
+  request({
+    url: 'http://localhost:3000/notification/cod-order-placed',
+    method: 'POST',
+    json: true,
+    body:req.body,
+    gzip: true
+    }, function(err, codOrder){ 
+      //  console.log(err,codOrder.body)
+    callback(err, codOrder.body.message)
   });
 }

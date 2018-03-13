@@ -1,6 +1,7 @@
 var query = require('./query')
 var ObjectId = require('mongodb').ObjectID
 var nodemailer = require('nodemailer')
+var config = require('../utils/config') 
 
 //ticket creation email notification
 exports.ticketcreate = function (req, next, callback) { //console.log(req.body)
@@ -198,4 +199,97 @@ exports.confirmchange = function (req, next, callback) { //console.log(req.body)
     
     });
      
+}
+
+
+
+// cod order placed email notification
+
+exports.codorderPlaced = function (req, next, callback) { console.log(req.body)
+
+    var email_arr = [req.body.email]  
+
+    var nodemailer = require('nodemailer');
+    var smtpTransport = require('nodemailer-smtp-transport');
+    var handlebars = require('handlebars');
+    var fs = require('fs');
+
+    var readHTMLFile = function(path, callback) {
+        fs.readFile(path, {encoding: 'utf-8'}, function (err, html) { 
+            if (err) {
+                console.log(err);
+                return callback(err,null)
+            }
+            else {
+                callback(null, html);
+            }
+        });
+    };
+
+    smtpTransport = nodemailer.createTransport(smtpTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+        auth: {
+            user: config.gmail.username,
+            pass: config.gmail.password
+        }
+    }));
+
+    readHTMLFile(__dirname + '/pages/orderplaced.html', function(err, html) {
+        var template = handlebars.compile(html);
+        var replacements = {
+            shop : {
+                url : "https://upload.wikimedia.org/wikipedia/en/5/5e/Gothiccover.png",
+                name : "Tiny Qwl",
+                email : "tinyqwl@gmail.com"    
+            },
+            billing_address : {
+                name : req.body.billing_address.name,
+                street : req.body.billing_address.street,
+                city : req.body.billing_address.city,
+                state : req.body.billing_address.state,
+                pin : req.body.billing_address.pin,
+                country : req.body.billing_address.country,
+            },
+            shipping_address : {
+                name : req.body.shipping_address.name,
+                street : req.body.shipping_address.street,
+                city : req.body.shipping_address.city,
+                state : req.body.shipping_address.state,
+                pin : req.body.shipping_address.pin,
+                country : req.body.shipping_address.country,
+            }, 
+            line : {
+                quantity : req.body.order.cart.totalQty,
+                // title    : req.body.order.cart.totalitems[Object.keys(totalitems)[0]].item.title,
+                
+                price    :  req.body.order.cart.totalPrice
+            },
+            date : "03/03/18/",
+            subtotal_price : "100",
+            shipping_price : "40",
+            discounts_savings : "50",
+            tax_line : {
+                title : "gst",
+                price : "18%"
+            },
+            total_price : "140"
+        };
+        var htmlToSend = template(replacements);
+        var mailOptions = {
+            subject : 'Order confirmation',
+            from: 'aayushkr90@gmail.com',
+            to : email_arr,
+            html : htmlToSend
+        };
+        smtpTransport.sendMail(mailOptions, function (error, info) {
+            if (error) {
+            console.log(error);
+            return callback(error,null);
+            }
+            console.log("info",info)
+            callback(null, info.messageId) 
+        });
+    });
 }

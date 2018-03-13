@@ -23,3 +23,9 @@ exports.confirmchange = function (req, next, callback) {
     callback(err, confirm)
   })
 }
+
+exports.codorderPlaced = function (req, next, callback) {
+  OperationalComands.codorderPlaced(req, next, function (err, confirm) {
+    callback(err, confirm)
+  })
+}

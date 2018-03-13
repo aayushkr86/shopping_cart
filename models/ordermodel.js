@@ -2,9 +2,8 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 require('mongoose-type-email')
 
-var OrdersSchema = new Schema({
- 
-    user: {
+var OrdersSchema = new Schema({ 
+    user : {
         type: Schema.Types.ObjectId,
         ref: 'User'
         },
@@ -12,22 +11,85 @@ var OrdersSchema = new Schema({
         type: Object,
         required: true
         },
-    address: {
-        type: String,
-        min:20,
-        max:100,
-        required: true
-        },      
-    name: {
+    name : {
         type: String,
         min:5,
         max:20,
         required: true
-        },  
+        },
+    shipping_address : {
+        name : {
+            type: String,
+            max:15,
+            required: true
+        },
+        street : {
+            type: String,
+            max:15,
+            required: true
+        },
+        city : {
+            type: String,
+            max:15,
+            required: true
+        },
+        state : {
+            type: String,
+            max:15,
+            required: true
+        },
+        pin : {
+            type: String,
+            max:15,
+            required: true
+        },
+        country : {
+            type: String,
+            max:15,
+            required: true
+        },
+    },
+    billing_address : {
+        name : {
+            type: String,
+            max:15,
+            required: true
+        },
+        street : {
+            type: String,
+            max:15,
+            required: true
+        },
+        city : {
+            type: String,
+            max:15,
+            required: true
+        },
+        state : {
+            type: String,
+            max:15,
+            required: true
+        },
+        pin : {
+            type: String,
+            max:15,
+            required: true
+        },
+        country : {
+            type: String,
+            max:15,
+            required: true
+        },
+    },  
     createdAt : {
         type: Date,
         default: Date.now
-    },
+        },
+    status : {
+        type: String,
+        default: 'placed',
+        enum:['placed','shipped','intransit','delivered'],    
+        }
 })
 
 var Orders = mongoose.model('orders', OrdersSchema)

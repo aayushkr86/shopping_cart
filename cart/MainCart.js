@@ -7,7 +7,7 @@ exports.addtocart = function (req, next, callback) {
 }
 
 exports.shoppingcart = function (req, next, callback) {
-  if(!req.session.cart){
+  if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
   OperationalComands.shoppingcart(req, next, function (err, cart) {
@@ -16,7 +16,7 @@ exports.shoppingcart = function (req, next, callback) {
 }
 
 exports.checkout = function (req, next, callback) {
-  if(!req.session.cart){
+  if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
   OperationalComands.checkout(req, next, function (err, cart) {
@@ -25,7 +25,7 @@ exports.checkout = function (req, next, callback) {
 }
 
 exports.placeCodorder = function (req, next, callback) {
-  if(!req.session.cart){
+  if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
   OperationalComands.placeCodorder(req, next, function (err, order) {
@@ -34,7 +34,7 @@ exports.placeCodorder = function (req, next, callback) {
 }
 
 exports.reduceone = function (req, next, callback) {
-  if(!req.session.cart){
+  if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
   OperationalComands.reduceone(req, next, function (err, cart) {
@@ -43,7 +43,7 @@ exports.reduceone = function (req, next, callback) {
 }
 
 exports.remove = function (req, next, callback) {
-  if(!req.session.cart){
+  if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
   OperationalComands.remove(req, next, function (err, cart) {
@@ -51,3 +51,18 @@ exports.remove = function (req, next, callback) {
   })
 }
 
+exports.changestatus = function (req, next, callback) {
+  req.checkBody('_id', 'Invalid _id').notEmpty().isMongoId();
+  req.checkBody('status', 'Invalid status').notEmpty();
+  var errors = req.validationErrors();
+  if(errors){
+    var messages = [];
+    errors.forEach(function(error){
+        messages.push(error.msg);
+    })
+    return callback(errors,messages)
+}
+  OperationalComands.changestatus(req, next, function (err, status) {
+    callback(err, status)
+  })
+}
