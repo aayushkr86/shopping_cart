@@ -109,3 +109,77 @@ router.post('/is-product', function (req, res, next) {
   })
 })
 
+
+
+
+
+
+var Products = require('../models/productmodel');
+var Category = require('../models/categorymodel');
+
+router.get('/temp', function (req, res, next) {  
+  
+
+
+
+
+
+  Category.find({}).exec(function(err, category) { //console.log("category",category)
+    if (err) {
+      res.json({ "status":"0", "message": "Something went wrong" });
+    } else {
+      var response = [];
+      if(category.length){
+
+         
+         var count = 0;
+         category.forEach(function(key, value){ console.log(key)
+             
+              Products.find({category: key.name}).exec(function(err, products) { //console.log("products",products)
+                  
+                  response.push({
+                    // "_id":key._id,
+                    // "userid":key.userid,
+                    // "channelid":key.channelid,
+                    // "title":key.title,
+                    // "videoUrl":key.videoUrl,
+                    // "totalViews":key.totalViews,
+                    // "createdAt":key.createdAt,
+                    // "updatedAt":key.updatedAt,
+                    // "comments":comments
+
+                    "category" : key.name,
+                    "products" : products
+
+
+
+
+                  });
+                   count++;
+                  if( count == category.length){
+                    res.json({"status":"1", "category":response});
+                  }
+                 
+              });
+          });
+          
+      }else{
+        res.json({"status":"1", "category": category});
+      }
+
+      
+    }         
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+})
