@@ -205,7 +205,7 @@ exports.confirmchange = function (req, next, callback) { //console.log(req.body)
 
 // cod order placed email notification
 
-exports.codorderPlaced = function (req, next, callback) { console.log(req.body)
+exports.codorderPlaced = function (req, next, callback) { //console.log(req.body)
 
     var email_arr = [req.body.email]  
 
@@ -260,34 +260,37 @@ exports.codorderPlaced = function (req, next, callback) { console.log(req.body)
                 pin : req.body.shipping_address.pin,
                 country : req.body.shipping_address.country,
             }, 
-            line : {
-                quantity : req.body.order.cart.totalQty,
-                // title    : req.body.order.cart.totalitems[Object.keys(totalitems)[0]].item.title,
-                // title : 
-                
-                // price    :  req.body.order.cart.totalPrice
-            },
+
+            line : [
+                // {
+                // title    : '',
+                // quantity : '',
+                // price    : '',
+                // }
+            ],
+
             date : req.body.order.createdAt,
 
-            subtotal_price : req.body.order.cart.totalPrice,
-            shipping_price : "40",
+            subtotal_price : req.body.order.cart.subtotal,
+            shipping_price : req.body.order.cart.shipping.amount,
             discounts_savings : req.body.order.cart.coupon.discount,
             tax_line : {
-                title : "gst",
+                title : "gst included",
                 price : "18%"
             },
-            total_price :" subtotal_price + shipping_price"
+            total_price : req.body.order.cart.totalPrice,
         };
 
-
-        // var replacements = new Object();
-        // replacements.subtotal_price =  req.body.order.cart.totalPrice + (req.body.order.cart.totalPrice * .18);
-        // replacements.total_price = replacements.subtotal_price + replacements.shipping_price
-        // replacements.shop.url = "https://upload.wikimedia.org/wikipedia/en/5/5e/Gothiccover.png"
-        // replacements.shop.name = "Tiny Qwl",
-        // replacements.shop.email = "tinyqwl@gmail.com"
-
-
+        items = req.body.order.cart.totalitems
+        Object.values(items).forEach(function(element){ //console.log(element)
+                product = {}
+                product.picture = element.item.photos
+                product.title = element.item.title,
+                product.quantity = element.qty,
+                product.price = element.price,
+                replacements.line.push(product);
+        })      
+        console.log(replacements.line)
 
         var htmlToSend = template(replacements);
         var mailOptions = {

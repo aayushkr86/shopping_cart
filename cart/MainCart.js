@@ -19,11 +19,11 @@ exports.checkout = function (req, next, callback) {
   if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
-
   OperationalComands.checkout(req, next, function (err, cart) {
     //console.log(req.session.cart)
   // console.log(cart.totalPrice)
-  if(cart.totalPrice < 300  && req.session.cart.shipping.status != "Applied") {            //shipping charge
+  
+  if(cart.totalPrice < 300  && req.session.cart.shipping.status != "Applied") { //add shipping charge
     req.session.cart['shipping'] = { 
                                     status : "Applied",
                                     amount : 40

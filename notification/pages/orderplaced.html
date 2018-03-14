@@ -225,14 +225,14 @@
 		<td></td>
 		<td class="header container">
 			
-				<div class="content">
+				<div class="content" >
 					<table bgcolor="#ff4259">
 						<tr>
-							<td>
+							<td >
 								<a href= {{ shop.url}} title="" alt= {{ shop.name }} /><img src="" style="width:70px;height:auto;" /></a>
 							</td>
 							<td align="right">
-								<h6 class="collapse">Order Confirmed</h6>	
+								<h6 class="collapse" style="text-align:center">Order Confirmed</h6>	
 							</td>
 						</tr>
 					</table>
@@ -270,16 +270,27 @@
 
 						<!-- Line Items -->
 						<div class="products">
-							<img src="" />
-							<span> {{ line.quantity }}x {{ line.title }} / {{ line.price }}</span>
+							
+							<span> 
+								{{#line}} 
+								<li>
+									<img src= "{{ picture }}"  alt="image" height="60" width="60"/>
+									{{ quantity }} x {{ title }} / {{ price }}
+								</li>
+								<br>
+								<br> 
+								{{/line}}</span>
+							
 						</div>
+
 						<hr>
 						<div style="clear:both;"></div>
 						<!-- /Line Items -->
 						
 						<br/>
 						<br/>
-						
+						<br/>
+
 						<!-- Totals -->
 						<h5><b>Subtotal:</b> {{ subtotal_price }}</h5>
 						

@@ -21,10 +21,19 @@ var CategorySchema = new Schema({
         type: [ObjectId],
         required: true
     },
+    count : {
+        type: Number,
+        default : null
+    },
     createdAt : {
         type: Date,
         default: Date.now
+    },
+    updatedAt : {
+        type: Date,
+        default: Date.now
     }  
+
 })
 
 var Category = mongoose.model('categories', CategorySchema)

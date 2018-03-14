@@ -40,7 +40,9 @@ exports.checkout = function (req, next, callback) {   //console.log(req.body.cod
     var param = {
       "code" : req.body.code
     } 
+    req.session.cart['subtotal'] = totalPrice       // price before any calculation
     query.checkcoupon(req, param, next, function (err, iscoupon) { //console.log(err,iscoupon)
+      
       if(err) {
         coupon = {
           "code" : "Not applied",

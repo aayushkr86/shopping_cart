@@ -6,4 +6,10 @@ exports.categories = function (req, next, callback) {
   })
 }
 
+exports.addcategory = function (req, next, callback) {
+  OperationalComands.addcategory(req, next, function (err, category) {
+    callback(err, category)
+  })
+}
+
 

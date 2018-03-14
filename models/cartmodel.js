@@ -32,7 +32,7 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
 
     this.generateArray = function() {
         var arr = [];        
-        Object.keys(this.totalitems).forEach(function(element) { 
+        Object.values(this.totalitems).forEach(function(element) { 
             arr.push(element)
         })
         return arr;

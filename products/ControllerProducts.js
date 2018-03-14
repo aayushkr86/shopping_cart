@@ -1,25 +1,23 @@
 var express = require('express')
 var router = express.Router()
 var MainProducts = require('./MainProducts')
-
 var multer = require('multer');
+
 var storage = multer.diskStorage({ 
-    destination : function(req,file,callback){
+    destination : function(req,file,callback){  console.log(req.body)
                     callback(null,'./uploads/');
     },
     filename: function(req,file,callback){
                 callback(null,new Date().toISOString() +'-'+ file.originalname)
     }
 });
-
-var fileFilter = function(req,file,callback){
+var fileFilter = function(req,file,callback){  console.log(req.body)
                 if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/gif'){
                     callback(null,true);
                 }else{
                     callback("not a image file",false);
                 }
 }
-
 var upload = multer({
   storage: storage,
   limits:{
@@ -44,17 +42,16 @@ function response (res,statuscode,err,data) {
   res.status(statuscode).json({ "message": data });
 }
 
-//form-data problem
-router.use('/pic-upload',function(req, res, next){console.log(req.body)
-  if(req.body._id){
-    next()
-  }
-  else {
-    data = "_id is required"
-    response(res, 400, null, data)
-  }    
-})
-
+// form-data problem
+// router.use('/pic-upload', function(req, res, next){ console.log(req.file);console.log(req.body)
+//   if(req.body._id){
+//     next()
+//   }
+//   else {
+//     data = "_id is required"
+//     response(res, 400, null, data)
+//   }    
+// })
 
 router.post('/pic-upload', upload.single('pic'), function (req, res, next) {  //console.log(req.file);console.log(req.body)
   MainProducts.picupload(req, next, function (err, data) { //console.log(err,data)
