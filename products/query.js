@@ -1,4 +1,5 @@
 var Products = require('../models/productmodel')
+var Category = require('../models/categorymodel')
 var Users   = require('../users/index')
 var notification = require('../notification/index')
 var ObjectId = require('mongodb').ObjectID
@@ -14,9 +15,18 @@ exports.picupload = function (param, next, callback) {
 
 //add products
 exports.addproducts = function (param, next, callback) {
-  Products.create(param).then(function (products) { 
-    callback(null, products)
-  }).catch(next)
+  var query = {"name" : param.category}
+  Category.findOne(query).then(function (category) { //console.log(category)
+    if ( category == null){
+      return callback(true,"no category found")
+    }  
+    Products.create(param).then(function (products) { 
+      Category.findOneAndUpdate(query,{ $inc:{ count:1 }},     // increment count in category
+          {new: true, runValidators: true}).then(function (category) { //console.log(category)
+          }).catch(next)
+      callback(null, products)
+    }).catch(next)
+  })
 }
 
 //all products

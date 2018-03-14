@@ -11,7 +11,8 @@ exports.categories = function (param, next, callback) {
 }
 
 exports.addcategory = function (param, next, callback) {
-  Category.create(param).then(function (category) { //console.log(category)
+    var category = new Category(param);
+    category.save().then(function(category){ //console.log(category)
       callback(false, category)
     }).catch(next)
 }

@@ -16,6 +16,20 @@ exports.picupload = function (req, next, callback) { //console.log(req.file);
 }
 
 exports.addproducts = function (req, next, callback) {
+  req.checkBody('product_id','product_id is required').notEmpty();
+  req.checkBody('title','title is required').notEmpty();
+  req.checkBody('description','description is required').notEmpty();
+  req.checkBody('price','price is required').notEmpty();
+  req.checkBody('category','category is required').notEmpty();
+  req.checkBody('sku','sku is required').notEmpty();
+  var errors = req.validationErrors();
+  if(errors){
+      var messages = [];
+      errors.forEach(function(error){ 
+          messages.push(error.msg);
+      })
+      return callback(true,messages)
+  } 
   OperationalComands.addproducts(req, next, function (err, products) {
     callback(err, products)
   })

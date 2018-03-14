@@ -19,7 +19,8 @@ exports.addproducts = function (req, next, callback) { //console.log(req.body)
     'description' : req.body.description,
     'photos' : req.body.photos,
     'price' : req.body.price,
-    'categories' : req.body.categories
+    'category' : req.body.category,
+    'sku' : req.body.sku
   }
   query.addproducts(param, next, function (err, products) {
   callback(err, products)

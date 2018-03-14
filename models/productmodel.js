@@ -37,9 +37,21 @@ var ProductsSchema = new Schema({
         max: 25,
         required: true
     },
-    categories: {
+    category: {
         type: String,
-        default: null
+        required: true
+    },
+    sku: {
+        type:Number,
+        required: true,
+        unique: true,
+        // matches: /^[0-9]{10,}$/,
+        validate: {
+            validator: function (v) {
+              return /^[0-9]{6}$/.test(v)   // must be 6 in length
+            },
+            message: '{VALUE} is not a valid sku!'
+          }
     },
     createdAt : {
         type: Date,

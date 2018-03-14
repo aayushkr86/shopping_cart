@@ -8,7 +8,7 @@ exports.categories = function (req, next, callback) { //console.log(req.body)
   })
 }
 
-exports.addcategory = function (req, next, callback) { //console.log(req.body)
+exports.addcategory = function (req, next, callback) { console.log(req.body)
   var param = {
     "name" : req.body.name,
     "description" : req.body.description
