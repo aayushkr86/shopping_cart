@@ -2,14 +2,20 @@ var LocalStrategy   = require('passport-local').Strategy
 var passport = require('passport')
 var bcrypt = require('bcrypt')
 var Users = require('../models/usersmodel')
+var Admins = require('../models/adminmodel')
 
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function(user, done) { console.log("user==>")
     done(null, user.id);
 });
-passport.deserializeUser(function(id, done) {
-    Users.findById(id, function(err, user) {
-        done(err, user);
+passport.deserializeUser(function(id, done) { console.log("user_id==>")
+    Users.findById(id, function(err, user) { //console.log(user)
+        if(!user){
+            Admins.findById(id,function(err,admin){ //console.log(err, admin)
+                 done(err, admin)
+            })
+        }
+        // done(err, user);
     });
 })
 
@@ -34,11 +40,9 @@ function(req, email, password, done) {
         errors.forEach(function(error){
             messages.push(error.msg);
         })
-        return done(errors,messages)
+    return done(errors,messages)
     } 
     
-
-
    var query = {$or: [{ 'google.email': email },{ 'facebook.email': email }]}
    Users.findOne(query, function(err, social) { //console.log("google",social)
     if(social){
@@ -64,7 +68,7 @@ function(req, email, password, done) {
         
         })            
          
-    }else{
+    }else {
             Users.findOne({ 'local.email' :  email }, function(err, user) {
                     // console.log(email, password);
                     //console.log(user)
@@ -87,7 +91,7 @@ function(req, email, password, done) {
                         });
                     }
 
-                }); 
+            }); 
         }
    })
        

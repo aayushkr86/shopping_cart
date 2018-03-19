@@ -16,6 +16,7 @@ var MongoStore = require('connect-mongo')(session)
 var localPassportSetup = require('./passport/passport_local')
 var googlePassportSetup = require('./passport/passport_google')  
 var facebookPassportSetup = require('./passport/passport_facebook')
+var adminPassportSetup = require('./admin/passport/passport_admin')
 var index = require('./routes/index')
 
 app.use(expressValidator()) //used in req.checkBody
@@ -39,8 +40,8 @@ app.set('view engine', 'ejs')
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json()) // parse application/json
+app.use(bodyParser.urlencoded({ extended: true })) // parse application/x-www-form-urlencoded
 app.use(cookieParser())
 app.use(session({
   secret: 'work hard',

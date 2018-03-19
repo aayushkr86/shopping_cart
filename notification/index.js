@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
 // ticket create email notification api
 module.exports.ticketcreate = function (req, next, callback) {  //console.log(req.body)
     request({
-      url: 'http://localhost:3000/notification/send-ticket-create-email-notification',
+      url: `http://${req.headers.host}/notification/send-ticket-create-email-notification`,
       method: 'POST',
       json: true,
       body:req.body,
@@ -22,7 +22,7 @@ module.exports.ticketcreate = function (req, next, callback) {  //console.log(re
 // ticket status change email notification api
 module.exports.ticketstatus = function (req, next, callback) {  //console.log(req.body)
     request({
-      url: 'http://localhost:3000/notification/send-ticket-status-change-email-notification',
+      url: `http://${req.headers.host}/notification/send-ticket-status-change-email-notification`,
       method: 'POST',
       json: true,
       body:req.body,
@@ -36,7 +36,7 @@ module.exports.ticketstatus = function (req, next, callback) {  //console.log(re
 // forgot password email reset api
 module.exports.forgotpassword = function (req, next, callback) {  //console.log(req.body)
   request({
-    url: 'http://localhost:3000/notification/forgot-password',
+    url: `http://${req.headers.host}/notification/forgot-password`,
     method: 'POST',
     json: true,
     body:req.body,
@@ -50,7 +50,7 @@ module.exports.forgotpassword = function (req, next, callback) {  //console.log(
 // password change confirmation email 
 module.exports.confirmchange = function (req, next, callback) {  //console.log(req.body)
   request({
-    url: 'http://localhost:3000/notification/confirm-password-change',
+    url: `http://${req.headers.host}/notification/confirm-password-change`,
     method: 'POST',
     json: true,
     body:req.body,
@@ -64,7 +64,7 @@ module.exports.confirmchange = function (req, next, callback) {  //console.log(r
 // order placed email notification
 module.exports.codorderPlaced = function (req, next, callback) {  //console.log(req.body)
   request({
-    url: 'http://localhost:3000/notification/cod-order-placed',
+    url: `http://${req.headers.host}/notification/cod-order-placed`,
     method: 'POST',
     json: true,
     body:req.body,

@@ -8,7 +8,7 @@ var products = require('../products/index')
 var cart = require('../cart/index')
 var coupons = require('../coupons/index')
 var category = require('../category/index')
-
+var admin = require('../admin/index')
 
 module.exports = router
 
@@ -24,7 +24,7 @@ router.use('/products', products)                               // product micro
 router.use('/cart', cart)                                       // cart/order microservice
 router.use('/coupons', coupons)                                 // coupons microservice
 router.use('/category', category)                               // category microservice
-
+router.use('/admin', admin)                                     // admin microservice
 
 // error handler
 router.use(function (err, req, res, next) {

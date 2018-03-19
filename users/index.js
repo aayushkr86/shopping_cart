@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
 
 module.exports.isuser = function (req, next, callback) {  
   request({
-    url: 'http://localhost:3000/user/is-user',
+    url: `http://${req.headers.host}/user/is-user`,
     method: 'POST',
     json: true,
     body:req.body,

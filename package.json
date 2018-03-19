@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "start": "node server",
@@ -23,6 +23,7 @@
     "flash": "^1.1.0",
     "fs": "0.0.1-security",
     "handlebars": "^4.0.11",
+    "jsonwebtoken": "^8.2.0",
     "mocha": "^5.0.1",
     "mongoose": "^5.0.4",
     "mongoose-long": "^0.1.1",
@@ -37,6 +38,7 @@
     "passport-google": "^0.3.0",
     "passport-google-oauth": "^1.0.0",
     "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "request": "^2.83.0",
     "require": "^2.4.20",

@@ -29,16 +29,37 @@ exports.addproducts = function (param, next, callback) {
   })
 }
 
-//all products
-exports.allproducts = function (param, next, callback) {
-  Products.find(param).then(function (products) { 
-    callback(null, products)
-  }).catch(next)
+
+// all products a/c category
+exports.allproducts = function (param, next, callback) { 
+  Products.aggregate([
+    { $group : { 
+                _id : "$category", 
+                products : { $addToSet: {
+                                        _id:"$_id" ,
+                                        photos : "$photos",
+                                        createdAt :"$createdAt",
+                                        product_id : "$product_id",
+                                        title : "$title",
+                                        description : "$description",
+                                        price : "$price",
+                                        category : "$category" ,
+                                        sku : "$sku",
+                                        } 
+                            },count: { "$sum": 1 }
+              }                                                            
+    }
+  ]).exec(function(err,products){
+        if(err || (products.length == 0)){
+          return callback(true,products)
+        }
+        callback(false, products)
+      })
 }
 
 //is products
 exports.isproduct = function (param, next, callback) {
-  Products.findById(param).then(function (product) { 
+  Products.findById(param).then(function (product) { //console.log(product)
     if(product == null){
       return  callback(true ,"no product found")
     }

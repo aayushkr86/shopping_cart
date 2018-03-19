@@ -32,11 +32,6 @@ var ProductsSchema = new Schema({
         max: 100,
         default: null
     },  
-    price: {
-        type: Number,
-        max: 25,
-        required: true
-    },
     category: {
         type: String,
         required: true
@@ -52,6 +47,11 @@ var ProductsSchema = new Schema({
             },
             message: '{VALUE} is not a valid sku!'
           }
+    },
+    price: {
+        type: Number,
+        max: 25,
+        required: true
     },
     createdAt : {
         type: Date,
