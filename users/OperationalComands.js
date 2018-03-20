@@ -139,3 +139,13 @@ exports.resetpassword =function (req,next,callback) { //console.log(req.params.t
     callback(false,data)
   })
 }
+
+
+exports.detail =function (req,next,callback) { //console.log(req.body)
+  var param = {
+        "_id":req.body._id
+  }
+  query.detail(param,next, function (err, users) {
+    callback(err, users)
+  })
+}

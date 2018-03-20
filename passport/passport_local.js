@@ -5,19 +5,43 @@ var Users = require('../models/usersmodel')
 var Admins = require('../models/adminmodel')
 
 
-passport.serializeUser(function(user, done) { console.log("user==>")
-    done(null, user.id);
+passport.serializeUser(function(User, done) { console.log("user==>",User._id)
+
+    Users.findById(User._id, function(err, user) { //console.log(user)
+            if(user) {
+                var key = {
+                    type : "user",
+                    id : user._id
+                }
+            return done(null, key);    
+            }
+        Admins.findById(User._id,function(err, admin) { //console.log(admin)
+            if(admin) {
+                var key = {
+                        type : "admin",
+                        id : admin._id
+                    }
+            return done(null, key); 
+            }           
+        })                        
+    })    
 });
-passport.deserializeUser(function(id, done) { console.log("user_id==>")
-    Users.findById(id, function(err, user) { //console.log(user)
-        if(!user){
-            Admins.findById(id,function(err,admin){ //console.log(err, admin)
-                 done(err, admin)
-            })
-        }
-        // done(err, user);
-    });
+
+
+passport.deserializeUser(function(key, done) { console.log("user_id==>",key)
+    
+    var Model = key.type === 'user' ? Users : Admins;
+
+    Model.findById(key.id,function(err,data) { //console.log(err, data)
+                     done(err, data)
+                })
+
 })
+
+
+
+
+
 
 
 // passport signup

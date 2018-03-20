@@ -109,10 +109,26 @@ router.get('/remove/:product_id',function(req, res, next) {
   })
 })
 
-//change order status
+//change order status //admin
 router.post('/change-order-status', //passloginvalidator.isLoggedIn, admin should be loggedin
 function(req, res, next) {
   MainCart.changestatus(req, next, function (err, data) { //console.log(err,data)
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
+
+//all orders except delivered //admin
+router.get('/all-pending-orders', //passloginvalidator.isLoggedIn, admin should be loggedin
+function(req, res, next) {
+  MainCart.allpendingorders(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)
     } 

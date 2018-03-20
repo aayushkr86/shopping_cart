@@ -129,3 +129,10 @@ exports.changestatus = function (req, next, callback) { //console.log(req.body)
   callback(err, status)
   })
 }
+
+exports.allpendingorders = function (req, next, callback) { //console.log(req.body)
+  var param = {}
+  query.allpendingorders(req, param, next, function (err, orders) {
+  callback(err, orders)
+  })
+}

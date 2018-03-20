@@ -6,12 +6,6 @@ exports.getallusers = function (req, next, callback) {
     })
 }
 
-exports.profileview = function (req, next, callback) {
-  OperationalComands.profileview(req, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
 exports.updateuser = function (req, next, callback) { 
   req.checkBody('firstname', 'Invalid firstname').notEmpty().isAlpha();
   req.checkBody('email','Invalid email').notEmpty().isEmail();
@@ -44,5 +38,11 @@ exports.isuser = function (req, next, callback) {
 exports.logintoken = function (req, next, callback) {
   OperationalComands.logintoken(req, next, function (err, token) {
     callback(err, token)
+  })
+}
+
+exports.filters = function (req, next, callback) {
+  OperationalComands.filters(req, next, function (err, orders) {
+    callback(err, orders)
   })
 }

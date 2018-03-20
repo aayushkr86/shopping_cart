@@ -4,6 +4,7 @@ var passport_admin = require('passport')
 var LocalStrategy   = require('passport-local').Strategy
 var Admins = require('../../models/adminmodel')
 
+
 // passport_admin.serializeUser(function(user, done) { console.log("admin==>",user)
 //     // console.log(user)
 //     done(null, user.id);
@@ -13,17 +14,18 @@ var Admins = require('../../models/adminmodel')
 //         done(err, user);
 //     });
 // })
+var JwtBearerStrategy = require('passport-http-bearer')
 
 var options = {
     jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey    : 'secret',
-    issuer         : 'accounts.examplesoft.com',
-    audience       : 'yoursite.net'
+    // issuer         : 'accounts.examplesoft.com',
+    // audience       : 'yoursite.net'
 }
 
-passport_admin.use('jwt', new JwtStrategy(options, function(jwt_payload, done) { console.log(jwt_payload)
+passport_admin.use('jwt', new JwtStrategy(options, function(jwt_payload, done) { //console.log(jwt_payload)
 
-    Admins.findOne({id: jwt_payload.sub}, function(err, admin) { console.log('admin')
+    Admins.findOne({id: jwt_payload.sub}, function(err, admin) { //console.log(err,admin)
         if (err) {
             return done(err, false);
         }
@@ -31,7 +33,7 @@ passport_admin.use('jwt', new JwtStrategy(options, function(jwt_payload, done) {
             return done(null, false);
         } else {
             return done(null, admin);
-            // or you could create a new account
+           
         }
     });
 }));
@@ -106,9 +108,9 @@ function(req, email, password, done) {
     req.checkBody('email','Invalid email').notEmpty().isEmail();
     req.checkBody('password','Invalid password').notEmpty().isLength({min:8});
     var errors = req.validationErrors();
-    if(errors){
+    if(errors) {
         var messages = [];
-        errors.forEach(function(error){
+        errors.forEach(function(error) {
             messages.push(errors.msg);
         })
         return done(errors,messages)

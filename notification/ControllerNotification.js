@@ -73,3 +73,14 @@ router.post('/cod-order-placed', function (req, res, next) {
     }
   })
 })
+
+// cod order placed email notification
+router.post('/order-status-change', function (req, res, next) {
+  MainNotification.changeOrderStatus(req, next, function (err, data) { //console.log(err,data)
+    if (err) {
+      response(res, 400, err, [])
+    } else {
+      response(res, 200, null, data)
+    }
+  })
+})

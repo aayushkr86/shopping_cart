@@ -1,6 +1,8 @@
 var mongoose = require('mongoose')
+const textSearch = require('mongoose-text-search')
 var Schema = mongoose.Schema
 require('mongoose-type-email')
+
 
 var OrdersSchema = new Schema({ 
     user : {
@@ -91,6 +93,9 @@ var OrdersSchema = new Schema({
         enum:['placed','shipped','intransit','delivered'],    
         }
 })
+
+OrdersSchema.plugin(textSearch);
+OrdersSchema.index({'$**': 'text'});
 
 var Orders = mongoose.model('orders', OrdersSchema)
 

@@ -78,3 +78,12 @@ exports.updatepassword = function (param, next, callback) { //console.log(param)
       callback(null, password)  
   }).catch(next)
 }
+
+exports.detail = function (param, next, callback) { 
+  Users.findById(param).then( function (detail) { //console.log(detail)
+    if(!detail){
+      return callback(true, "no user found")
+    }
+      callback(null, detail)
+  }).catch(next)
+}

@@ -4,6 +4,7 @@ var product = require('../products/index')
 var coupon = require('../coupons/index') 
 var Orders = require('../models/ordermodel')
 var notification = require('../notification/index')
+var user = require('../users/index')
 
 
 exports.isproduct = function (req, param, next, callback) {
@@ -45,9 +46,29 @@ exports.changestatus = function (req, param, next, callback) {
   var query = {'_id':param._id}
   Orders.findByIdAndUpdate(query,{$set:{'status':param.status}},
   {new: true, runValidators: true}).then(function (status) { //console.log(status)
-    if(!status){
+    if(!status) {
       return callback(true,"no order found");
     }
-    callback(null, status)
+    req.body['_id'] = status.user;
+    user.userdetail(req, next, function(err, detail){ //console.log(detail)
+      if(!err && detail == "no user found"){
+        return callback(true,"no user found");
+      }
+      req.body['order'] = status;
+      req.body['email'] = detail.email;
+      notification.changeOrderStatus(req, next, function(err, notification) { //email notification
+            callback(null, status)
+      })
+    })  
+  }).catch(next)
+}
+
+exports.allpendingorders = function (req, param, next, callback) {
+  var query = {"status":{$ne:"delivered"}}
+  Orders.find(query).sort({"createdAt" : -1}).then(function(orders) { //console.log(orders.length)
+    if(!orders){
+      return callback(true, "no orders found")
+    }
+      callback(false, orders)
   }).catch(next)
 }

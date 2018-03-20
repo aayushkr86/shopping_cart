@@ -29,3 +29,9 @@ exports.codorderPlaced = function (req, next, callback) {
     callback(err, confirm)
   })
 }
+
+exports.changeOrderStatus = function (req, next, callback) {
+  OperationalComands.changeOrderStatus(req, next, function (err, confirm) {
+    callback(err, confirm)
+  })
+}

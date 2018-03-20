@@ -76,3 +76,9 @@ exports.changestatus = function (req, next, callback) {
     callback(err, status)
   })
 }
+
+exports.allpendingorders = function (req, next, callback) {
+  OperationalComands.allpendingorders(req, next, function (err, orders) {
+    callback(err, orders)
+  })
+}

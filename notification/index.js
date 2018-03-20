@@ -74,3 +74,17 @@ module.exports.codorderPlaced = function (req, next, callback) {  //console.log(
     callback(err, codOrder.body.message)
   });
 }
+
+// order status changed email notification
+module.exports.changeOrderStatus = function (req, next, callback) {  //console.log(req.body)
+  request({
+    url: `http://${req.headers.host}/notification/order-status-change`,
+    method: 'POST',
+    json: true,
+    body:req.body,
+    gzip: true
+    }, function(err, orderStatus){ 
+      //  console.log(err,orderStatus.body)
+    callback(err, orderStatus.body.message)
+  });
+}

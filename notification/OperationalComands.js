@@ -309,3 +309,106 @@ exports.codorderPlaced = function (req, next, callback) { //console.log(req.body
         });
     });
 }
+
+
+//order status change email notification
+exports.changeOrderStatus = function (req, next, callback) { //console.log(req.body.order)
+    
+    var email_arr = [req.body.email]  
+     
+
+    var nodemailer = require('nodemailer');
+    var smtpTransport = require('nodemailer-smtp-transport');
+    var handlebars = require('handlebars');
+    var fs = require('fs');
+
+    var readHTMLFile = function(path, callback) {
+        fs.readFile(path, {encoding: 'utf-8'}, function (err, html) { 
+            if (err) {
+                console.log(err);
+                return callback(err,null)
+            }
+            else {
+                callback(null, html);
+            }
+        });
+    };
+
+    smtpTransport = nodemailer.createTransport(smtpTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+        auth: {
+            user: config.gmail.username,
+            pass: config.gmail.password
+        }
+    }));
+
+    readHTMLFile(__dirname + '/pages/statuschange.html', function(err, html) {
+        var template = handlebars.compile(html);
+        var replacements = {
+            status : req.body.order.status,
+            shop : {
+                url : "https://upload.wikimedia.org/wikipedia/en/5/5e/Gothiccover.png",
+                name : "Tiny Qwl",
+                email : "tinyqwl@gmail.com"    
+            },
+            billing_address : {
+                name : req.body.order.billing_address.name,
+                street : req.body.order.billing_address.street,
+                city : req.body.order.billing_address.city,
+                state : req.body.order.billing_address.state,
+                pin : req.body.order.billing_address.pin,
+                country : req.body.order.billing_address.country,
+            },
+            shipping_address : {
+                name : req.body.order.shipping_address.name,
+                street : req.body.order.shipping_address.street,
+                city : req.body.order.shipping_address.city,
+                state : req.body.order.shipping_address.state,
+                pin : req.body.order.shipping_address.pin,
+                country : req.body.order.shipping_address.country,
+            }, 
+
+            line : [],
+
+            date : req.body.order.createdAt,
+
+            subtotal_price : req.body.order.cart.subtotal,
+            shipping_price : req.body.order.cart.shipping.amount,
+            discounts_savings : req.body.order.cart.coupon.discount,
+            tax_line : {
+                title : "gst included",
+                price : "18%"
+            },
+            total_price : req.body.order.cart.totalPrice,
+        };
+
+        items = req.body.order.cart.totalitems
+        Object.values(items).forEach(function(element){ //console.log(element)
+                product = {}
+                product.picture = element.item.photos
+                product.title = element.item.title,
+                product.quantity = element.qty,
+                product.price = element.price,
+                replacements.line.push(product);
+        })      
+        console.log(replacements.line)
+
+        var htmlToSend = template(replacements);
+        var mailOptions = {
+            subject : 'Order Status changed',
+            from: 'aayushkr90@gmail.com',
+            to : email_arr,
+            html : htmlToSend
+        };
+        smtpTransport.sendMail(mailOptions, function (error, info) {
+            if (error) {
+            console.log(error);
+            return callback(error,null);
+            }
+            console.log("info",info)
+            callback(null, info.messageId) 
+        });
+    });    
+}

@@ -3,22 +3,13 @@ var ObjectId = require('mongodb').ObjectID
 var notification = require('../notification/index')
 var async = require('async')
 var bcrypt = require('bcrypt')
+var jwt = require('jsonwebtoken')
+var passport = require('passport')
 
 
 exports.getallusers = function (req, next, callback) {
   var param = {}
   query.users(param, next, function (err, users) {
-    callback(err, users)
-  })
-}
-
-exports.profileview = function (req, next, callback) { 
-  // console.log(req.admin)
-  // console.log(req.user)
-  // console.log(req.session.passport)
-  var param = req.user
-  //req.session.userId
-  query.view(param, next, function (err, users) {
     callback(err, users)
   })
 }
@@ -54,9 +45,7 @@ exports.isuser =function (req,next,callback) {
   })
 }
 
-var jwt = require('jsonwebtoken');
-// var passport_admin = require('./passport/passport_admin').passport
-var passport = require('passport')
+
 exports.logintoken =function (req,next,callback) { //console.log(req.body)
   passport.authenticate('admin-login', function(err, user, info) { //console.log(user)
     if (err) 
@@ -64,17 +53,30 @@ exports.logintoken =function (req,next,callback) { //console.log(req.body)
     if (!user) {
         return callback(true, 'Login incorrect' );
     }
-    req.logIn(user, function(err) { console.log(err)
-        if (err) {
-          return callback(err, "error123")
-        }   
-        // var secretOrKey = jwtOptions.secretOrKey;
-        var secretOrKey = "secret"
-        var token = jwt.sign(user.toJSON(), secretOrKey, {
-            expiresIn: 631139040 // 20 years in seconds
-        });
-        // res.send({ user: user, jwtToken: "JWT " + token });
-        callback(false, { user: user, jwtToken: token })
-    });
+      req.logIn(user, function(err) { //console.log(err)
+          if (err) {
+            return callback(err, "error123")
+          }   
+          // var secretOrKey = jwtOptions.secretOrKey;
+          var secretOrKey = "secret"
+          var token = jwt.sign(user.toJSON(), secretOrKey, {
+              expiresIn: 10800 // 3 hrs in seconds
+          });
+          // res.send({ user: user, jwtToken: "JWT " + token });
+          callback(false, { user: user, jwtToken: token })
+      });
   })(req, next)
+}
+
+
+exports.filters =function (req,next,callback) { //console.log(req.query)
+  var param = {
+        "from"     : new Date (req.body.from),
+        "to"       : new Date (req.body.to),
+        "category" : req.body.category,
+        "status"   : req.body.status   
+  }
+  query.filters(param,next, function (err, orders) {
+    callback(err, orders)
+  })
 }

@@ -22,13 +22,7 @@ var AdminsSchema = new Schema({
     type: String,
   },
   mobileno: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /^[0-9]{10}$/.test(v)
-      },
-      message: '{VALUE} is not a valid mobile number!'
-    }
+    type: String
   },
   permissions:{
               category: {

@@ -156,3 +156,17 @@ router.post('/reset/:token', passloginvalidator.notLoggedIn, function (req, res,
     }
   })
 })
+
+
+//user details api 
+router.post('/user-detail', function (req, res, next) { //console.log(req.body)
+  MainUsers.detail(req, next, function (err, data) {
+    if (err && data ) {
+      response(res, 400, err, data)
+    } else if (err) {
+      response(res, 400, null, [])
+    } else {
+      response(res, 200, null, data)
+    }
+  })
+})

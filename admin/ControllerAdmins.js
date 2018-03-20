@@ -3,8 +3,7 @@ var router = express.Router()
 var passport_admin = require('passport')
 var jwt = require('jsonwebtoken');
 var MainAdmins = require('./MainAdmins')
-var passloginvalidator = require('../passport/pass_loginvalidator')
-
+var adminvalidator = require('../admin/passport/passportlogin_validator')
 
 module.exports = router
 
@@ -23,7 +22,7 @@ function response (res,statuscode,err,data) { //console.log(statuscode,err,data)
 }
 
 // user list api
-router.get('/user-list', function (req, res, next) {
+router.get('/user-list', adminvalidator.isAdminLoggedin, function (req, res, next) {
   MainAdmins.getallusers(req, next, function (err, data) {
     if (err) {
       response(res, 400, err, [])
@@ -34,35 +33,18 @@ router.get('/user-list', function (req, res, next) {
 })
 
 //update profile api
-router.post('/update-profile',function (req, res, next) {       
+router.post('/update-profile', adminvalidator.isAdminLoggedin, function (req, res, next) {       
   MainAdmins.updateuser(req, next, function (err, data) { // console.log(err, data)
     if (err && data) {
       response(res, 400, err, data)
     } 
-    else if(err){
+    else if(err) {
       response(res, 400, err, [])
     }
     else {
       response(res, 200, null, data)
     }
   })  
-})
-
-// current profile api (after registering)
-router.get('/profile', passloginvalidator.isLoggedIn, 
-function (req, res, next) { 
-  // console.log(req.body)    
-  MainAdmins.profileview(req, next, function (err, data) {
-    if (err && data) {
-      response(res, 400, err, data)
-    } 
-    else if(err){
-      response(res, 400, err, [])
-    }
-    else {
-      response(res, 200, null, data)
-    }
-  })
 })
 
 //logout api
@@ -93,26 +75,38 @@ router.post('/admin-passport-signup', passport_admin.authenticate('admin-signup'
   failureFlash : true 
 }));
 
-// //local login api
-// router.post('/admin-passport-login', 
-//   function(req, res, next){
-//   passport_admin.authenticate('admin-login',function(err,user,info) {
 
-//   // console.log(err,user,info)
-//   response(res, 200, null,  user )
-
-//   // successRedirect : '/admin/profile', 
-//   // failureRedirect : '/', 
-//   // failureFlash : true 
-//   })(req,res,next);
-// })
-
-router.post('/admin-passport-login', function(req, res, next){
+// passport login
+router.post('/admin-passport-login', function(req, res, next) {
   MainAdmins.logintoken(req, next, function (err, data) {     
     if (err && data) {
       response(res, 400, err, data)
     } 
-    else if(err){
+    else if(err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+}); 
+
+ 
+router.get('/profile', adminvalidator.isAdminLoggedin,
+// passport_admin.authenticate('jwt', { session: false }),
+    function(req, res) { //console.log(req.user)
+        res.send(req.user);
+    }
+);
+
+//==============================================filters==========================================================//
+
+router.post('/filters', adminvalidator.isAdminLoggedin, function(req, res, next) {
+  MainAdmins.filters(req, next, function (err, data) {     
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if(err) {
       response(res, 400, err, [])
     }
     else {
@@ -122,10 +116,4 @@ router.post('/admin-passport-login', function(req, res, next){
 }); 
 
 
-// admin auth check
-router.post('/profile', passport_admin.authenticate('jwt', { session: false }),
-    function(req, res) { console.log(req.user)
-        res.send(req.user.profile);
-    }
-);
-
+//==============================================filters==========================================================//

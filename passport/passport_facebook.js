@@ -6,15 +6,15 @@ var passport = require('passport')
 var Users = require('../models/usersmodel')
 var configAuth = require('../utils/config')
     
-    passport.serializeUser(function(user, done) {
-        done(null, user.id);
-    });
+    // passport.serializeUser(function(user, done) {
+    //     done(null, user.id);
+    // });
 
-    passport.deserializeUser(function(id, done) {
-        Users.findById(id, function(err, user) {
-            done(err, user);
-        });
-    });
+    // passport.deserializeUser(function(id, done) {
+    //     Users.findById(id, function(err, user) {
+    //         done(err, user);
+    //     });
+    // });
 
     passport.use(new FacebookStrategy({
 

@@ -58,3 +58,9 @@ exports.resetpassword = function (req, next, callback) {
     callback(err, token)
   })  
 }
+
+exports.detail = function (req, next, callback) {
+  OperationalComands.detail(req, next, function (err, token) {
+    callback(err, token)
+  })  
+}
