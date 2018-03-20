@@ -13,8 +13,8 @@ module.exports.isadmin = function (req, next, callback) {
     json: true,
     body:req.body,
     gzip: true
-  }, function(err, users){ 
-    //  console.log(users.body)
-    callback(err, users.body.message)
+  }, function(err, admins){ 
+    //  console.log(admins.body)
+    callback(err, admins.body.message)
   });
 }

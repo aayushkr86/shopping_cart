@@ -7,9 +7,9 @@ var jwt = require('jsonwebtoken')
 var passport = require('passport')
 
 
-exports.getallusers = function (req, next, callback) {
+exports.getalladmins = function (req, next, callback) {
   var param = {}
-  query.users(param, next, function (err, users) {
+  query.alladmins(param, next, function (err, users) {
     callback(err, users)
   })
 }
@@ -36,7 +36,7 @@ exports.updateuser = function (req, next, callback) {  //console.log(req.body)
 }
 
 
-exports.isuser =function (req,next,callback) { 
+exports.isuser =function (req,next,callback) { //console.log(req.body)
   var param = {
         "email":req.body.email
   }

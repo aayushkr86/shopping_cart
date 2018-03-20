@@ -25,7 +25,7 @@ var options = {
 
 passport_admin.use('jwt', new JwtStrategy(options, function(jwt_payload, done) { //console.log(jwt_payload)
 
-    Admins.findOne({id: jwt_payload.sub}, function(err, admin) { //console.log(err,admin)
+    Admins.findById(jwt_payload._id, function(err, admin) { //console.log(err,admin)
         if (err) {
             return done(err, false);
         }

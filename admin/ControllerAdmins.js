@@ -22,15 +22,32 @@ function response (res,statuscode,err,data) { //console.log(statuscode,err,data)
 }
 
 // user list api
-router.get('/user-list', adminvalidator.isAdminLoggedin, function (req, res, next) {
-  MainAdmins.getallusers(req, next, function (err, data) {
-    if (err) {
-      response(res, 400, err, [])
+router.get('/admin-list', adminvalidator.isAdminLoggedin, function (req, res, next) {
+  MainAdmins.getalladmins(req, next, function (err, data) {
+    if (err && data) {
+      response(res, 400, err, data)
+    }else if (err){
+      response(res, 400, null, [])
     } else {
       response(res, 200, null, data)
     }
   })
 })
+
+
+// check if admin exists
+router.post('/is-admin', function (req, res, next) { 
+  MainAdmins.isuser(req, next, function (err, data) {     
+    if (err && data) {
+      response(res, 400, err, data)
+    }else if (err){
+      response(res, 400, null, [])
+    } else {
+      response(res, 200, null, data)
+    }
+  })
+})
+
 
 //update profile api
 router.post('/update-profile', adminvalidator.isAdminLoggedin, function (req, res, next) {       
@@ -47,26 +64,12 @@ router.post('/update-profile', adminvalidator.isAdminLoggedin, function (req, re
   })  
 })
 
+
 //logout api
 router.get('/admin-passport-logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
-
-// check if user exists
-router.post('/is-user', function (req, res, next) { 
-  MainAdmins.isuser(req, next, function (err, data) {     
-    if (err) { console.log(err)
-      response(res, 400, err, {})
-    } else if (data == null) {
-      data = "no user found"
-      response(res, 400, null, data)
-    } else { 
-      response(res, 200, null, data)
-    }
-  })
-})
-
 
 //local signup api
 router.post('/admin-passport-signup', passport_admin.authenticate('admin-signup', {

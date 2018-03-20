@@ -1,7 +1,7 @@
 var OperationalComands = require('./OperationalComands')
 
-exports.getallusers = function (req, next, callback) {
-    OperationalComands.getallusers(req, next, function (err, users) {
+exports.getalladmins = function (req, next, callback) {
+    OperationalComands.getalladmins(req, next, function (err, users) {
       callback(err, users)
     })
 }
