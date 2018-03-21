@@ -96,6 +96,7 @@ var OrdersSchema = new Schema({
 
 OrdersSchema.plugin(textSearch);
 OrdersSchema.index({'$**': 'text'});
+// OrdersSchema.index({"cart": 'text'})
 
 var Orders = mongoose.model('orders', OrdersSchema)
 

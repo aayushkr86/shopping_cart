@@ -29,47 +29,89 @@ exports.update = function (req,param, next, callback) { //console.log(param)
 })                              
 }
 
-
-exports.isuser = function (param, next, callback) { //console.log(param)
+exports.isadmin = function (param, next, callback) { //console.log(param)
   var query = { 'email': param.email }
-  Admins.find(query).then( function (users) { //console.log(users)
-    if(users.length == 0){
+  Admins.find(query).then( function (admin) { //console.log(admin)
+    if(admin.length == 0){
       return callback(true, "admin not found")
     }
-    callback(null, users)
+    callback(null, admin)
   }).catch(next)
 }
 
-
-
-
-
-
-
-
-
-
 exports.filters = function (param, next, callback) { //console.log(param)
-
-
-  // var query = {$or:[{ "createdAt": { $gte: new Date(param.from) , $lt:new Date(param.to)}},{"category":req.body.category}]}
 
   var query = {
     $and:[
-      {"createdAt": { $gte: param.from, $lt: param.to}},
-      // {$text: {$search: param.category}},
-      {$text: {$search: param.status}}
+      {"createdAt" : { $gte: param.from, $lt: param.to }},
+      {$text : { $search: param.category }},
+      {"status" : { $in : param.status }}
     ]
   }
-  // 
 
-  Orders.find( query,{ score : { $meta: "textScore" } } )
-  
-  .sort({ score : { $meta : 'textScore' } })
-  .then( function (orders) { console.log(orders.length)
-    if(orders.length == 0) {
-      return callback(true, 'no order found')
+  // filter only date and status
+  if(param.category == undefined || !param.category.trim()) { console.log('im 1')
+      query = {
+      $and:[
+        {"createdAt" : { $gte: param.from, $lt: param.to }},
+        {"status" : { $in : param.status }}
+      ]
     }
-      callback(null, orders)
-  }).catch(next)
+  }
+
+  // filter only date and category
+  if(param.status == undefined || param.status.length == 0 ) { console.log('im 2')
+      query = {
+      $and:[
+        {"createdAt" : { $gte: param.from, $lt: param.to }},
+        {$text : { $search: param.category }},
+      ]
+    }
+  }
+
+  //filter only category and status
+  if((param.from == "Invalid Date" || param.from == undefined) || (param.to == "Invalid Date" || param.to == undefined) ) 
+  { console.log('im 3')
+      query = {
+      $and:[
+        {$text : { $search: param.category }},
+        {"status" : { $in : param.status }}
+      ]
+    }
+  }
+
+  // filter only date
+  if((param.category == undefined || !param.category.trim()) && (param.status == undefined || param.status.length == 0)) { 
+    console.log('im 4')
+      query = {  
+        "createdAt" : { $gte: param.from, $lt: param.to }    
+    }
+  }
+
+  // filter only category
+  if(((param.from == "Invalid Date" || param.from == undefined) || (param.to == "Invalid Date" || param.to == undefined))
+                                            &&
+    (param.status == undefined || param.status.length == 0)) { console.log('im 5') ;
+      query = {
+        $text : { $search: param.category } 
+    }
+  }
+
+  // filter only status
+  if(((param.from == "Invalid Date" || param.from == undefined) || (param.to == "Invalid Date" || param.to == undefined))
+                                            &&
+    (param.category == undefined || !param.category.trim())) { console.log('im 6')
+      query = {  
+        "status" : { $in : param.status }    
+    }
+  }
+
+  Orders.find( query, { score : { $meta: "textScore" }})
+  .sort({ score : { $meta : 'textScore' } })
+    .then( function (orders) { console.log("total results",orders.length)
+      if(orders.length == 0) {
+        return callback(true, 'no order found')
+      }
+        callback(null, { "total results" : orders.length,orders })
+    }).catch(next)
 }

@@ -29,9 +29,9 @@ exports.updateuser = function (req, next, callback) {
   })
 }
 
-exports.isuser = function (req, next, callback) {
-  OperationalComands.isuser(req, next, function (err, users) {
-    callback(err, users)
+exports.isadmin = function (req, next, callback) {
+  OperationalComands.isadmin(req, next, function (err, admin) {
+    callback(err, admin)
   })
 }
 

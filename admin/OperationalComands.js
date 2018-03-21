@@ -36,12 +36,12 @@ exports.updateuser = function (req, next, callback) {  //console.log(req.body)
 }
 
 
-exports.isuser =function (req,next,callback) { //console.log(req.body)
+exports.isadmin =function (req,next,callback) { //console.log(req.body)
   var param = {
         "email":req.body.email
   }
-  query.isuser(param,next, function (err, users) {
-    callback(err, users)
+  query.isadmin(param,next, function (err, admin) {
+    callback(err, admin)
   })
 }
 
@@ -69,7 +69,7 @@ exports.logintoken =function (req,next,callback) { //console.log(req.body)
 }
 
 
-exports.filters =function (req,next,callback) { //console.log(req.query)
+exports.filters =function (req,next,callback) { //console.log(req.body)
   var param = {
         "from"     : new Date (req.body.from),
         "to"       : new Date (req.body.to),

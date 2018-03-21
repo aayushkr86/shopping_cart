@@ -37,7 +37,7 @@ router.get('/admin-list', adminvalidator.isAdminLoggedin, function (req, res, ne
 
 // check if admin exists
 router.post('/is-admin', function (req, res, next) { 
-  MainAdmins.isuser(req, next, function (err, data) {     
+  MainAdmins.isadmin(req, next, function (err, data) {     
     if (err && data) {
       response(res, 400, err, data)
     }else if (err){
@@ -117,6 +117,5 @@ router.post('/filters', adminvalidator.isAdminLoggedin, function(req, res, next)
     }
   })
 }); 
-
 
 //==============================================filters==========================================================//
