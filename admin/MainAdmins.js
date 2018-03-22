@@ -14,18 +14,18 @@ exports.updateuser = function (req, next, callback) {
   req.checkBody('city', 'Invalid city').notEmpty().isAlpha();
   req.checkBody('pin', 'Invalid pin').notEmpty().isNumeric();
   var errors = req.validationErrors();
-  if(errors){
+  if(errors) {
       var messages = [];
       errors.forEach(function(error){
           messages.push(error.msg);
       })
       return callback(errors,messages)
   } 
-  if((req.user.email ) != req.body.email) {
+  if(req.user.email != req.body.email) {
     return callback(true, "same user should be logged in !!!")
   }
-  OperationalComands.updateuser(req, next, function (err, users) {
-    callback(err, users)
+  OperationalComands.updateuser(req, next, function (err, admin) {
+    callback(err, admin)
   })
 }
 
@@ -45,4 +45,16 @@ exports.filters = function (req, next, callback) {
   OperationalComands.filters(req, next, function (err, orders) {
     callback(err, orders)
   })
+}
+
+//permission checks
+module.exports = { 
+
+    adminAddPermission : function (req, next, callback) { //console.log(req.body)
+    OperationalComands.adminAddPermission(req, next, function (err, permission) { //console.log("permission")
+      
+      // callback(err, permission)
+    })
+  }
+
 }

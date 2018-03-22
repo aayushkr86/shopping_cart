@@ -36,7 +36,7 @@ exports.allproducts = function (req, next, callback) {
 
 exports.isproduct = function (req, next, callback) { //console.log(req.body)
   var param = {
-    "_id" : req.body._id
+    "_id" : ObjectId(req.body._id)
   }
   query.isproduct(param, next, function (err, products) {
   callback(err, products)

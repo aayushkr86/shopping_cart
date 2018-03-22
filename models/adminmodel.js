@@ -24,7 +24,7 @@ var AdminsSchema = new Schema({
   mobileno: {
     type: String
   },
-  permissions:{
+  permissions: {
               category: {
                 type : [String],
                 enum : ['add','delete','update']
@@ -32,6 +32,26 @@ var AdminsSchema = new Schema({
               products: {
                 type : [String],
                 enum : ['add','delete','update']
+              },
+              coupons: {
+                type : [String],
+                enum : ['add','delete','update']
+              },
+              tickets: {
+                type : [String],
+                enum : ['add','delete','update']
+              },
+              orders: {
+                type : [String],
+                enum : ['add','delete','update']
+              },           
+              admin: {
+                type : [String],
+                enum : ['add','delete']
+              },
+              notification: {
+                type : Boolean,
+                default : true
               }
   },
   state: {
@@ -47,18 +67,18 @@ var AdminsSchema = new Schema({
     type: String,
     enum:['male','female']
   },
-  createdAt : {
+  createdAt: {
     type: Date,
     default: Date.now
   },
-  updatedAt : {
+  updatedAt: {
     type: Date,
   },
 });
 
 AdminsSchema.pre('save', function (next) { //console.log(this)
   var admin = this; 
-  if(admin == undefined){
+  if (admin == undefined) {
     next();
   }
     bcrypt.hash(admin.password, 10, function (err, hash) {

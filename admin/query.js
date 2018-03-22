@@ -14,19 +14,18 @@ exports.alladmins = function (param, next, callback) {
 }
 
 
-exports.update = function (req,param, next, callback) { //console.log(param)
-  Admins.findOne({'mobileno': param.mobileno}).exec(function (err,mobileno) {
+exports.update = function (req, param, next, callback) { //console.log(param)
+  Admins.findOne({'mobileno': param.mobileno}).exec(function (err, mobileno) { 
     if(mobileno == null || (mobileno.mobileno == req.user.mobileno)) {
       var query = { 'email':param.email }
       Admins.findOneAndUpdate(query,{$set:param}
-        ,{new: true, runValidators: true}).then(function (users) { //console.log(users)
-          callback(null, users)
+        ,{new: true, runValidators: true}).then(function (admin) { //console.log(admin)
+          callback(null, admin)
       }).catch(next)
-
-    }else{
+    }else {
       callback(true, "mobileno. already taken")
     }
-})                              
+  })                             
 }
 
 exports.isadmin = function (param, next, callback) { //console.log(param)
@@ -114,4 +113,20 @@ exports.filters = function (param, next, callback) { //console.log(param)
       }
         callback(null, { "total results" : orders.length,orders })
     }).catch(next)
+}
+
+//permission check
+exports.adminAddPermission = function (param, next, callback) { //console.log(param)
+  var query = { 
+    $and : [
+      {'email' : param.email},
+      {"permissions.admin" : {$elemMatch:{$in : ["add"]}}}
+    ]
+  }
+  Admins.find(query).then( function (admin) { console.log(admin.length)
+    if(admin.length == 0){
+      return callback(true, "You don't have permission to add new admin!!!")
+    }
+    callback(null, admin)
+  }).catch(next)
 }

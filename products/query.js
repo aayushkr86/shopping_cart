@@ -60,7 +60,7 @@ exports.allproducts = function (param, next, callback) {
 //is products
 exports.isproduct = function (param, next, callback) {
   Products.findById(param).then(function (product) { //console.log(product)
-    if(product == null){
+    if(product == null) {
       return  callback(true ,"no product found")
     }
       callback(false, product)

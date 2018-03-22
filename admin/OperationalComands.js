@@ -16,22 +16,26 @@ exports.getalladmins = function (req, next, callback) {
 
 exports.updateuser = function (req, next, callback) {  //console.log(req.body)
   var param = {
-    'firstname': req.body.firstname,
-    'lastname': req.body.lastname,
-    'email': req.body.email,
-    'mobileno': req.body.mobileno,
-    'state': req.body.state,
-    'city': req.body.city,
-    'pin': req.body.pin,
-    'gender': req.body.gender,
-    'permissions':{
-              'category':  req.body.permissions.category, 
-              'products':  req.body.permissions.products, 
-      }
-
+    'firstname'   : req.body.firstname,
+    'lastname'    : req.body.lastname,
+    'email'       : req.body.email,
+    'mobileno'    : req.body.mobileno,
+    'state'       : req.body.state,
+    'city'        : req.body.city,
+    'pin'         : req.body.pin,
+    'gender'      : req.body.gender,
+    'permissions' : {
+              'category' :  req.body.permissions.category, 
+              'products' :  req.body.permissions.products,
+              'coupons' :  req.body.permissions.coupons,
+              'tickets' :  req.body.permissions.tickets,
+              'orders' :  req.body.permissions.orders,
+              'admin' :  req.body.permissions.admin,
+              'notification' :  req.body.permissions.notification, 
+    }
   }
-  query.update(req, param, next, function (err, users) {
-    callback(err, users)
+  query.update(req, param, next, function (err, admin) {
+    callback(err, admin)
   })
 }
 
@@ -78,5 +82,15 @@ exports.filters =function (req,next,callback) { //console.log(req.body)
   }
   query.filters(param,next, function (err, orders) {
     callback(err, orders)
+  })
+}
+
+
+exports.adminAddPermission =function (req, next, callback) { //console.log(req.user)
+  var param = {
+        'email' : req.user.email
+  }
+  query.adminAddPermission(param,next, function (err, permission) {
+    callback(err, permission)
   })
 }

@@ -56,34 +56,34 @@ passport_admin.use('admin-signup', new LocalStrategy({
 },
 function(req, email, password, done) {
 
- console.log(req.body, email, password)
+ //console.log(req.body, email, password)
     process.nextTick(function() {
 
     req.checkBody('email','Invalid email').notEmpty().isEmail();
     req.checkBody('password','Minimum eight characters, at least one letter, one number and one special character')
         .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/);
     var errors = req.validationErrors();
-    if(errors){
+    if(errors) {
         var messages = [];
-        errors.forEach(function(error){
+        errors.forEach(function(error) {
             messages.push(error.msg);
         })
     return done(errors,messages)
     } 
     Admins.findOne({ 'email' :  email }, function(err, admin) {
-            if(admin){
- //console.log(admin)
+            if(admin) {
+            console.log('That email is already taken.')
             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            }else{
+            }else {
                 var newAdmin      = new Admins();
                 newAdmin.email    = email;
                 newAdmin.password = password;
                 newAdmin.save(function(err,newadmin) { //console.log("err",err,"newAdmin",newAdmin)
-                    if (err){
+                    if (err) { 
                         return done(err)
                     }  
                     //  req.login(newadmin,function(admin){ console.log(admin)
-                         return done(null, admin);
+                         return done(null, newadmin);
                     //  })                      
                     
                 });
