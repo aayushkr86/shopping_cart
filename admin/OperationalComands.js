@@ -9,8 +9,8 @@ var passport = require('passport')
 
 exports.getalladmins = function (req, next, callback) {
   var param = {}
-  query.alladmins(param, next, function (err, users) {
-    callback(err, users)
+  query.alladmins(param, next, function (err, admins) {
+    callback(err, admins)
   })
 }
 

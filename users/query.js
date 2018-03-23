@@ -12,10 +12,10 @@ exports.users = function (param, next, callback) {
   }).catch(next)
 }
 
-exports.view = function (param, next, callback) { 
-  Users.findById(param,function (err, users) {
-    if (err) {
-      callback(err, users )
+exports.view = function (param, next, callback) { //console.log(param)
+  Users.findById(param,function (err, users) { //console.log(err, users)
+    if (!users) {
+      callback(true, "user not logged in!!!!!" )
     } else {
       callback(null, users)
     }

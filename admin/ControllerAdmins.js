@@ -3,8 +3,9 @@ var router = express.Router()
 var passport_admin = require('passport')
 var jwt = require('jsonwebtoken');
 var MainAdmins = require('./MainAdmins')
-var permissionCheck = require('./MainAdmins')
+var permissionCheck = require('./permissions')
 var adminvalidator = require('../admin/passport/passportlogin_validator')
+
 
 module.exports = router
 
@@ -73,17 +74,17 @@ router.get('/admin-passport-logout', function(req, res) {
 });
 
 
-//local signup api
+// local signup api
 router.post('/admin-passport-signup', adminvalidator.isAdminLoggedin, permissionCheck.adminAddPermission, function (req, res, next) { 
  passport_admin.authenticate('admin-signup', {
   // successRedirect : '/admin/profile',
   // failureRedirect : '/', 
   // failureFlash : true 
-  }, function(err, data){ //console.log(err, data)
+  }, function(err, data) { //console.log(err, data)
     if (err) {
       response(res, 400, err, err)
     } 
-    else if(data == false){
+    else if(data == false) {
       data = "That email is already taken."
       response(res, 400, err, data)
     }

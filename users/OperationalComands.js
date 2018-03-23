@@ -12,9 +12,9 @@ exports.getallusers = function (req, next, callback) {
   })
 }
 
-exports.profileview = function (req, next, callback) { 
+exports.profileview = function (req, next, callback) { //console.log(req.user._id) 
   
-  var param = req.user
+  var param = req.user._id
   //req.session.userId
   query.view(param, next, function (err, users) {
     callback(err, users)

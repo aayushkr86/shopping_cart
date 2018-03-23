@@ -1,8 +1,8 @@
 var OperationalComands = require('./OperationalComands')
 
 exports.getalladmins = function (req, next, callback) {
-    OperationalComands.getalladmins(req, next, function (err, users) {
-      callback(err, users)
+    OperationalComands.getalladmins(req, next, function (err, admins) {
+      callback(err, admins)
     })
 }
 
@@ -42,19 +42,19 @@ exports.logintoken = function (req, next, callback) {
 }
 
 exports.filters = function (req, next, callback) {
+  req.checkBody('from','Invalid Date-from').matches(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/);
+  req.checkBody('to', 'Invalid Date-to').matches(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/);
+  // req.checkBody('category','Invalid category')
+  req.checkBody('status', 'Invalid status').isArray();
+  var errors = req.validationErrors();
+  if(errors) {
+      var messages = [];
+      errors.forEach(function(error) {
+          messages.push(error.msg);
+      })
+      return callback(errors,messages)
+  } 
   OperationalComands.filters(req, next, function (err, orders) {
     callback(err, orders)
   })
-}
-
-//permission checks
-module.exports = { 
-
-    adminAddPermission : function (req, next, callback) { //console.log(req.body)
-    OperationalComands.adminAddPermission(req, next, function (err, permission) { //console.log("permission")
-      
-      // callback(err, permission)
-    })
-  }
-
 }

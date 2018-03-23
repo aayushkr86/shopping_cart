@@ -123,7 +123,7 @@ exports.adminAddPermission = function (param, next, callback) { //console.log(pa
       {"permissions.admin" : {$elemMatch:{$in : ["add"]}}}
     ]
   }
-  Admins.find(query).then( function (admin) { console.log(admin.length)
+  Admins.find(query).then( function (admin) { //console.log(admin.length)
     if(admin.length == 0){
       return callback(true, "You don't have permission to add new admin!!!")
     }

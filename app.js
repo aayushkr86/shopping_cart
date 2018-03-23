@@ -19,7 +19,20 @@ var facebookPassportSetup = require('./passport/passport_facebook')
 var adminPassportSetup = require('./admin/passport/passport_admin')
 var index = require('./routes/index')
 
-app.use(expressValidator()) //used in req.checkBody
+app.use(expressValidator({ //used in req.checkBody
+  customValidators: {
+    isArray: function(value) {
+       return Array.isArray(value);
+    },
+    // notEmpty: function(array) {
+    //    return array.length > 0;
+    // },
+    // gte: function(param, num) {
+    //    return param >= num;
+    // },
+    // exists: value => value !== undefined,
+ }
+})) 
 
 // mongoose connection
 var mongoose = require('mongoose')

@@ -49,9 +49,13 @@ router.post('/update-profile',passloginvalidator.isLoggedIn, function (req, res,
 // current profile api (after registering)
 router.get('/profile', passloginvalidator.isLoggedIn, function (req, res, next) {     
   MainUsers.profileview(req, next, function (err, data) {
-    if (err) {
+    if (err && data) {
       response(res, 400, err, data)
-    } else {
+    } 
+    else if(err){
+      response(res, 400, err, [])
+    }
+    else {
       response(res, 200, null, data)
     }
   })
