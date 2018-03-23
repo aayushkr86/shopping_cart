@@ -5,7 +5,7 @@ var Users = require('../models/usersmodel')
 var Admins = require('../models/adminmodel')
 
 
-passport.serializeUser(function(User, done) { console.log("serializer==>",User._id)
+passport.serializeUser(function(User, done) { //console.log("serializer==>",User._id)
 
     Users.findById(User._id, function(err, user) { //console.log(user)
             if(user) {
@@ -28,7 +28,7 @@ passport.serializeUser(function(User, done) { console.log("serializer==>",User._
 });
 
 
-passport.deserializeUser(function(key, done) { console.log("deserializer==>",key)
+passport.deserializeUser(function(key, done) { //console.log("deserializer==>",key)
     
     var Model = key.type === 'user' ? Users : Admins;
 

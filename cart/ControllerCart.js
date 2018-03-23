@@ -10,7 +10,7 @@ function response (res, statuscode, err, data) {
   if (statuscode === 200) {
     var data = data;
   }else if(statuscode === 400){
-    if(data == [] || data.length == 0){
+    if(data == [] || data.length == 0) {
       data = "Bad request";
     }
   }else{
@@ -49,7 +49,7 @@ router.get('/shopping-cart',function(req, res, next) {
   })
 })
 
-//check total price after coupon(if any)
+//shipping check
 router.post('/checkout', passloginvalidator.isLoggedIn, function(req, res, next) {
   MainCart.checkout(req, next, function (err, data) {
     if (err && data) {
@@ -129,6 +129,22 @@ function(req, res, next) {
 router.get('/all-pending-orders', //passloginvalidator.isLoggedIn, admin should be loggedin
 function(req, res, next) {
   MainCart.allpendingorders(req, next, function (err, data) { //console.log(err,data)
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
+
+
+//Clean cart
+router.get('/clear-cart',function(req, res, next) { 
+  MainCart.clearCart(req, next, function (err, data) {
     if (err && data) {
       response(res, 400, err, data)
     } 

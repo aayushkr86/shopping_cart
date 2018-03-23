@@ -1,6 +1,5 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
-require('mongoose-type-email')
 
 var CouponsSchema = new Schema({
     code: {
@@ -10,14 +9,45 @@ var CouponsSchema = new Schema({
         min : 5,
         max : 25
     },
+    min: {
+        type: Number,
+    },
+    max: {
+        type: Number,
+    },
     quantity: {
         type: Number,
-        // default: 1,
     },
-    discount: {
-        type: Number,
-        min: 1,
-        required: true
+    discount: { 
+            flat: {
+                type: Number,
+                required: true
+            },
+            ispercentage: {
+                type: Number,
+                required: true
+            },
+            upto: {
+                type: Number,
+                required: true
+            },
+    },
+    products: {
+            type: [Schema.Types.ObjectId],
+            ref: 'products'
+          
+    },
+    categories: {
+        type: [Schema.Types.ObjectId],
+        ref: 'categories' 
+    },
+    user : {
+        type: [Schema.Types.ObjectId],
+        ref: 'User'
+    },
+    not_user : {
+        type: [Schema.Types.ObjectId],
+        ref: 'User'
     },
     status: {
         type: String,

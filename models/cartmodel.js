@@ -1,4 +1,4 @@
-module.exports = function Cart(oldcart) { //console.log(oldcart);
+module.exports = function Cart(oldcart) { //console.log(oldcart.shipping);
   
     this.totalitems = oldcart.totalitems || {}
     this.totalQty   = oldcart.totalQty   || 0
@@ -7,15 +7,20 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
         code : "Not applied",
         discount : 0
     };
-    this.shipping = {
-        status : "Not applied",
-        amount : 0
-    };
+    
+    // if(oldcart.shipping == undefined || oldcart.shipping.status != 'Applied') { console.log('im here')
+    //     this.shipping = {
+    //         status : "Not applied",
+    //         amount : 0
+    //     };
+    // }
+    // console.log(oldcart)
+    // console.log(this)
     
     this.add = function(item,id) {   //console.log(item,id)
        
         var storedItem = this.totalitems[id];  // valid if item is already present in session
-        if(storedItem == undefined){ 
+        if(storedItem == undefined) { 
             storedItem = this.totalitems[id] = { 
                                             item : item,
                                             qty : 0, 

@@ -32,3 +32,17 @@ router.post('/is-coupon', function (req, res, next) {
   })
 })
 
+router.post('/add-coupon', function (req, res, next) {  
+  MainCoupons.addcoupon(req, next, function (err, data) { //console.log(err,data)
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})
+

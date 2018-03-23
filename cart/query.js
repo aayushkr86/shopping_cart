@@ -9,7 +9,7 @@ var user = require('../users/index')
 
 exports.isproduct = function (req, param, next, callback) {
   req.body['_id'] = param.product_id
-  product.isproduct(req,next,function(err,product){ console.log(err,product)
+  product.isproduct(req,next,function(err,product){ //console.log(err,product)
     if(product == undefined || product =='no product found') { 
       callback(true, "no product found")
     }else{

@@ -6,4 +6,10 @@ exports.iscoupon = function (req, next, callback) {
   })
 }
 
+exports.addcoupon = function (req, next, callback) {
+  OperationalComands.addcoupon(req, next, function (err, coupon) {
+    callback(err, coupon)
+  })
+}
+
 

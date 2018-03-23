@@ -15,24 +15,35 @@ exports.shoppingcart = function (req, next, callback) {
   })
 }
 
-exports.checkout = function (req, next, callback) {
-  if(!req.session.cart) {
-  return callback(true, "no item found in cart")
-  }
-  OperationalComands.checkout(req, next, function (err, cart) {
-    //console.log(req.session.cart)
-  // console.log(cart.totalPrice)
+// exports.checkout = function (req, next, callback) {
+//   if(!req.session.cart) {
+//   return callback(true, "no item found in cart")
+//   }
+//   OperationalComands.checkout(req, next, function (err, cart) {
+//     // console.log(req.session.cart)
+//   // console.log(cart)
   
-  if(cart.totalPrice < 300  && req.session.cart.shipping.status != "Applied") { //add shipping charge
-    req.session.cart['shipping'] = { 
-                                    status : "Applied",
-                                    amount : 40
-                                    };
-    req.session.cart.totalPrice  = cart.totalPrice + 40;
-  }
-    callback(err, req.session.cart)
-  })
-}
+//   if(cart.subtotal >= 300 && req.session.cart.shipping.status == "Applied") {
+//     req.session.cart['shipping'] = {
+//             status : "Not applied",
+//             amount : 0
+//         };
+//         req.session.cart.totalPrice  = cart.subtotal - 40;
+//         // console.log("req.session.cart")
+//   }
+
+
+//   if(cart.subtotal < 300  && req.session.cart.shipping.status != "Applied") { //add shipping charge
+   
+//     req.session.cart['shipping'] = { 
+//                                     status : "Applied",
+//                                     amount : 40
+//                                     };
+//     req.session.cart.totalPrice  = cart.subtotal + 40;
+//   }
+//     callback(err, req.session.cart)
+//   })
+// }
 
 exports.placeCodorder = function (req, next, callback) {
   if(!req.session.cart) {
@@ -43,21 +54,29 @@ exports.placeCodorder = function (req, next, callback) {
   })
 }
 
-exports.reduceone = function (req, next, callback) {
+exports.reduceone = function (req, next, callback) { //console.log(req.session.cart)
   if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
-  OperationalComands.reduceone(req, next, function (err, cart) {
+  OperationalComands.reduceone(req, next, function (err, cart) {  //console.log(cart)
+    if(Object.keys(cart.totalitems).length == 0){ 
+    req.session.cart = null;
+    return callback(true, "no item found")
+    }
     callback(err, cart)
   })
 }
 
-exports.remove = function (req, next, callback) {
+exports.remove = function (req, next, callback) { //console.log(req.session.cart)
   if(!req.session.cart) {
   return callback(true, "no item found in cart")
   }
-  OperationalComands.remove(req, next, function (err, cart) {
-    callback(err, cart)
+  OperationalComands.remove(req, next, function (err, cart) { //console.log(cart)
+    if(Object.keys(cart.totalitems).length == 0){ 
+      req.session.cart = null;
+      return callback(true, "no item found")
+      }
+      callback(err, cart)
   })
 }
 
@@ -80,5 +99,27 @@ exports.changestatus = function (req, next, callback) {
 exports.allpendingorders = function (req, next, callback) {
   OperationalComands.allpendingorders(req, next, function (err, orders) {
     callback(err, orders)
+  })
+}
+
+exports.clearCart = function (req, next, callback) {
+  if(!req.session.cart) {
+  return callback(true, "no item found in cart")
+  }
+  OperationalComands.clearCart(req, next, function (err, cart) {
+    callback(err, cart)
+  })
+}
+
+
+
+
+
+exports.checkout = function (req, next, callback) {
+  if(!req.session.cart) {
+  return callback(true, "no item found in cart")
+  }
+  OperationalComands.checkout(req, next, function (err, cart) { 
+    callback(err, req.session.cart)
   })
 }
