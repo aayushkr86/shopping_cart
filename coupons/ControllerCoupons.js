@@ -18,7 +18,7 @@ function response (res,statuscode,err,data) {
   res.status(statuscode).json({ "message": data });
 }
 
-router.post('/is-coupon', function (req, res, next) {  
+router.post('/is-coupon', function (req, res, next) { 
   MainCoupons.iscoupon(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)

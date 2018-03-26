@@ -19,9 +19,10 @@ exports.isproduct = function (req, param, next, callback) {
 }
 
 exports.checkcoupon = function (req, param, next, callback) {
-  req.body['code'] = param.code
-  coupon.iscoupon(req,next,function(err,coupon) { //console.log(err,coupon)
-    if(coupon !='no coupon found' && !err) { 
+  req.body['code'] = param.code;
+  req.body['cart'] = req.session.cart
+  coupon.iscoupon(req, next, function(err,coupon) { //console.log(err,coupon)
+    if(coupon !='no coupon found' || !err) { 
       callback(false, coupon)
     }else{
       callback(true, "no coupon found")

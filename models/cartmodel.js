@@ -3,11 +3,21 @@ module.exports = function Cart(oldcart) { //console.log(oldcart);
     this.totalitems = oldcart.totalitems || {}
     this.totalQty   = oldcart.totalQty   || 0
     this.totalPrice = oldcart.totalPrice || 0
-    this.coupon = {
-        code : "Not applied",
-        discount : 0
-    };
-
+   // coupon
+    if(oldcart.coupon) { 
+        this.totalPrice = this.totalPrice + oldcart.coupon.discount;
+        this.coupon = {
+            status : "Not applied",
+            discount : 0
+        };
+    }
+    if(oldcart.coupon == undefined) { 
+        this.coupon = {
+            status : "Not applied",
+            discount : 0
+        };    
+    }
+    // shipping
     if(oldcart.shipping) { 
         this.totalPrice = this.totalPrice - oldcart.shipping.amount;
         this.shipping = {

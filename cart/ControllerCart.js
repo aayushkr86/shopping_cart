@@ -156,3 +156,19 @@ router.get('/clear-cart',function(req, res, next) {
     }
   })
 })
+
+
+//apply coupon
+router.post('/apply-coupon',function(req, res, next) { 
+  MainCart.applyCoupon(req, next, function (err, data) {
+    if (err && data) {
+      response(res, 400, err, data)
+    } 
+    else if (err) {
+      response(res, 400, err, [])
+    }
+    else {
+      response(res, 200, null, data)
+    }
+  })
+})

@@ -3,9 +3,10 @@ var ObjectId = require('mongodb').ObjectID
 
 exports.iscoupon = function (req, next, callback) { //console.log(req.body)
   var param = {
-     "code" : req.body.code
+     "code" : req.body.code,
+     "cart" : req.body.cart
   }
-  query.iscoupon(param, next, function (err, coupon) {
+  query.iscoupon(req, param, next, function (err, coupon) {
   callback(err, coupon)
   })
 }
@@ -17,7 +18,7 @@ exports.addcoupon = function (req, next, callback) { //console.log(req.body)
       "max"      : req.body.max,
       "quantity" : req.body.quantity,
       "discount" : {
-                "flat"         : req.body.discount.flat,
+                "amount"       : req.body.discount.amount,
                 "ispercentage" : req.body.discount.ispercentage,
                 "upto"         : req.body.discount.upto,
                 },

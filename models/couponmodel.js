@@ -19,12 +19,12 @@ var CouponsSchema = new Schema({
         type: Number,
     },
     discount: { 
-            flat: {
+            amount: {
                 type: Number,
                 required: true
             },
             ispercentage: {
-                type: Number,
+                type: Boolean,
                 required: true
             },
             upto: {

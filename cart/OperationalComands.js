@@ -193,3 +193,50 @@ exports.checkout = function (req, next, callback) {   //console.log(req.body)
 
   callback(false, req.session.cart)
 }
+
+
+
+exports.applyCoupon = function (req, next, callback) {   //console.log(req.body)
+  if(req.session.cart['subtotal'] == undefined) { // price before any calculation
+    req.session.cart['subtotal'] = req.session.cart.totalPrice
+  }  
+  var param = {
+        "code" : req.body.code
+  }
+  //reset coupon
+  req.session.cart.totalPrice = req.session.cart.totalPrice + req.session.cart.coupon.discount
+  req.session.cart['coupon']  = {
+                                  "status" : "Not applied",
+                                  "discount" : 0
+                                }
+  query.checkcoupon(req, param, next, function (err, iscoupon) { //console.log(err,iscoupon)
+    
+    if(err || iscoupon == 'no coupon found') { 
+      return callback(false, req.session.cart)
+    }
+
+    else if(iscoupon.discount.ispercentage == true) {
+      var amount = (iscoupon.discount.amount / 100) * req.session.cart.totalPrice
+      if(amount > iscoupon.discount.upto) { //max discount
+          amount = iscoupon.discount.upto;
+      }
+      req.session.cart.totalPrice = req.session.cart.totalPrice - amount  //minus discount
+      req.session.cart['coupon']  = {
+                                      "status" : "Applied",
+                                      "discount" : amount
+                                    }
+      return callback(false, req.session.cart)
+    }
+
+    else if(iscoupon.discount.ispercentage == false) { 
+      req.session.cart.totalPrice = req.session.cart.totalPrice - iscoupon.discount.amount  //minus discount
+      req.session.cart['coupon']  = {
+                                      "status" : "Applied",
+                                      "discount" : iscoupon.discount.amount
+                                    }
+      return callback(false, req.session.cart)
+    }
+    
+  callback(false, req.session.cart)
+  })
+}

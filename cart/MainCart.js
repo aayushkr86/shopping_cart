@@ -123,3 +123,13 @@ exports.checkout = function (req, next, callback) {
     callback(err, req.session.cart)
   })
 }
+
+
+exports.applyCoupon = function (req, next, callback) {
+  if(!req.session.cart) {
+  return callback(true, "no item found in cart")
+  }
+  OperationalComands.applyCoupon(req, next, function (err, coupon) { 
+    callback(err, req.session.cart)
+  })
+}
