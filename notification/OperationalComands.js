@@ -205,7 +205,7 @@ exports.confirmchange = function (req, next, callback) { //console.log(req.body)
 
 // cod order placed email notification
 
-exports.codorderPlaced = function (req, next, callback) { //console.log(req.body)
+exports.codorderPlaced = function (req, next, callback) { //console.log(req.body.email)
 
     var email_arr = [req.body.email]  
 

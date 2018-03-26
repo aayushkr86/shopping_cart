@@ -80,7 +80,7 @@ exports.shoppingcart = function (req, next, callback) {
 //     })
 // }
 
-exports.placeCodorder = function (req, next, callback) { //console.log(req.body)
+exports.placeCodorder = function (req, next, callback) { //console.log(req.user)
   // var cart = new Cart(req.session.cart)
   var param = {
     'user'    : req.user,
@@ -188,7 +188,7 @@ exports.checkout = function (req, next, callback) {   //console.log(req.body)
                                     status : "Applied",
                                     amount : 40
                                   };
-    req.session.cart.totalPrice  = req.session.cart.subtotal + 40;
+    req.session.cart.totalPrice  = req.session.cart.totalPrice + 40;
   }
 
   callback(false, req.session.cart)
@@ -215,7 +215,7 @@ exports.applyCoupon = function (req, next, callback) {   //console.log(req.body)
       return callback(false, req.session.cart)
     }
 
-    else if(iscoupon.discount.ispercentage == true) {
+    else if(iscoupon.discount.ispercentage == true) { 
       var amount = (iscoupon.discount.amount / 100) * req.session.cart.totalPrice
       if(amount > iscoupon.discount.upto) { //max discount
           amount = iscoupon.discount.upto;
@@ -223,6 +223,7 @@ exports.applyCoupon = function (req, next, callback) {   //console.log(req.body)
       req.session.cart.totalPrice = req.session.cart.totalPrice - amount  //minus discount
       req.session.cart['coupon']  = {
                                       "status" : "Applied",
+                                      "code"   :  iscoupon.code,
                                       "discount" : amount
                                     }
       return callback(false, req.session.cart)
@@ -232,6 +233,7 @@ exports.applyCoupon = function (req, next, callback) {   //console.log(req.body)
       req.session.cart.totalPrice = req.session.cart.totalPrice - iscoupon.discount.amount  //minus discount
       req.session.cart['coupon']  = {
                                       "status" : "Applied",
+                                      "code"   :  iscoupon.code,
                                       "discount" : iscoupon.discount.amount
                                     }
       return callback(false, req.session.cart)

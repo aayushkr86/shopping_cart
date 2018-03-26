@@ -30,14 +30,19 @@ exports.checkcoupon = function (req, param, next, callback) {
   })
 }
 
+var Coupons = require('../models/couponmodel')
 //place orders
-exports.placeCodorder = function (req, param, next, callback) {
+exports.placeCodorder = function (req, param, next, callback) { //console.log(req.user)
   Orders.create(param).then(function (order) { 
     req.body['order'] = order;
-    req.body['email'] = req.user.email;
+    req.body['email'] = req.user.email || req.user.local.email || req.user.google.email
     notification.codorderPlaced(req, next, function(err, notification) { //email notification
-      req.session.cart = null; // reset the session after order placed
-      callback(null, order)
+
+      Coupons.findOneAndUpdate({"code" : param.cart.coupon.code},{ $inc:{ quantity: -1 }},     // decrement quantity in coupon
+        {new: true, runValidators: true}).then(function (quantity) { //console.log(quantity)
+        req.session.cart = null; // reset the session after order placed
+        callback(null, order)
+        }).catch(next)  
     })   
   }).catch(next)
 }

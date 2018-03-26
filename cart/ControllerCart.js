@@ -142,7 +142,7 @@ function(req, res, next) {
 })
 
 
-//Clean cart
+//clean cart
 router.get('/clear-cart',function(req, res, next) { 
   MainCart.clearCart(req, next, function (err, data) {
     if (err && data) {

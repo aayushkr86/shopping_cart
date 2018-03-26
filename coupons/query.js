@@ -19,7 +19,7 @@ exports.iscoupon = function (req, param, next, callback) { //console.log(param.c
     var flag = 0;
     Object.keys(param.cart.totalitems).forEach(function(key) {
     // console.log(coupon.products.indexOf(key));
-    if(coupon.products.indexOf(key) != -1) {
+    if(coupon.products.indexOf(key) != -1) {                     //check if product is present in coupon products array
       flag = 1;
     }
     });
@@ -31,6 +31,10 @@ exports.iscoupon = function (req, param, next, callback) { //console.log(param.c
       
     }).catch(next)
 }
+
+
+
+
 
 // add coupon
 exports.addcoupon = function (param, next, callback) {

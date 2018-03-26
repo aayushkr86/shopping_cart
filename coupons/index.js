@@ -7,7 +7,7 @@ module.exports = function (req, res, next) {
 
 module.exports.iscoupon = function (req, next, callback) {  
   request({
-    url: 'http://localhost:3000/coupons/is-coupon',
+    url: `http://${req.headers.host}/coupons/is-coupon`,
     method: 'POST',
     json: true,
     body:req.body,
