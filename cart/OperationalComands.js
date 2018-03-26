@@ -158,34 +158,36 @@ exports.clearCart = function (req, next, callback) {  //console.log(req.session.
 
 
 exports.checkout = function (req, next, callback) {   //console.log(req.body)
-  
-  if(req.session.cart['shipping'] == undefined) { 
-    var shipping = {
-            status : "Not applied",
-            amount : 0
-        };
-  req.session.cart['shipping'] = shipping; 
-  }
-  
-  if(req.session.cart['subtotal'] == undefined) { // price before any calculation
+
+  // set subtotal price before any calculation
+  if(req.session.cart['subtotal'] == undefined) { 
     req.session.cart['subtotal'] = req.session.cart.totalPrice   
-  }  
-  // console.log(req.session.cart)
-  if(req.session.cart.subtotal >= 300 && req.session.cart.shipping.status == "Applied") { 
-    req.session.cart['shipping'] = {
-            status : "Not applied",
-            amount : 0
-        };
-        req.session.cart.totalPrice  = req.session.cart.subtotal - 40;
-        // console.log("req.session.cart")
   }
 
-  if(req.session.cart.subtotal < 300  && req.session.cart.shipping.status != "Applied" && req.body.shipping != "pickup") { //add shipping charge
-    
+  //not add shipping charge
+  if(req.session.cart.subtotal >= 300 && req.session.cart.shipping.status == "Applied") { 
+    req.session.cart['shipping'] = {
+                                    status : "Not applied",
+                                    amount : 0
+                                  };
+    req.session.cart.totalPrice  = req.session.cart.subtotal - 40;
+  }
+
+  //not add shipping charge
+  if(req.session.cart.subtotal < 300 && req.session.cart.shipping.status == "Applied" && req.body.shipping == "pickup") { 
+    req.session.cart['shipping'] = {
+                                    status : "Not applied",
+                                    amount : 0
+                                  };
+    req.session.cart.totalPrice  = req.session.cart.totalPrice - 40;
+  }
+
+  //add shipping charge
+  if(req.session.cart.subtotal < 300  && req.session.cart.shipping.status != "Applied" && req.body.shipping != "pickup") { 
     req.session.cart['shipping'] = { 
                                     status : "Applied",
                                     amount : 40
-                                    };
+                                  };
     req.session.cart.totalPrice  = req.session.cart.subtotal + 40;
   }
 

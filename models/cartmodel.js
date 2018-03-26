@@ -1,4 +1,4 @@
-module.exports = function Cart(oldcart) { //console.log(oldcart.shipping);
+module.exports = function Cart(oldcart) { //console.log(oldcart);
   
     this.totalitems = oldcart.totalitems || {}
     this.totalQty   = oldcart.totalQty   || 0
@@ -7,15 +7,20 @@ module.exports = function Cart(oldcart) { //console.log(oldcart.shipping);
         code : "Not applied",
         discount : 0
     };
-    
-    // if(oldcart.shipping == undefined || oldcart.shipping.status != 'Applied') { console.log('im here')
-    //     this.shipping = {
-    //         status : "Not applied",
-    //         amount : 0
-    //     };
-    // }
-    // console.log(oldcart)
-    // console.log(this)
+
+    if(oldcart.shipping) { 
+        this.totalPrice = this.totalPrice - oldcart.shipping.amount;
+        this.shipping = {
+            status : "Not applied",
+            amount : 0
+        };
+    }
+    if(oldcart.shipping == undefined) { 
+        this.shipping = {
+            status : "Not applied",
+            amount : 0
+        };    
+    }
     
     this.add = function(item,id) {   //console.log(item,id)
        
@@ -32,7 +37,9 @@ module.exports = function Cart(oldcart) { //console.log(oldcart.shipping);
 
         this.totalQty++;
         this.totalPrice = this.totalPrice + storedItem.item.price
-        // console.log(this)
+        
+    // console.log(oldcart)
+    // console.log(this)
     }
 
     this.generateArray = function() {

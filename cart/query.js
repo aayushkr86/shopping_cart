@@ -51,7 +51,7 @@ exports.changestatus = function (req, param, next, callback) {
     }
     req.body['_id'] = status.user;
     user.userdetail(req, next, function(err, detail){ //console.log(detail)
-      if(!err && detail == "no user found"){
+      if(!err || (detail == "no user found")) {
         return callback(true,"no user found");
       }
       req.body['order'] = status;
