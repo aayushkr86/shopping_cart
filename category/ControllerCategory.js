@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var MainCategory = require('./MainCategory')
+var adminvalidator = require('../admin/passport/passportlogin_validator')
 
 module.exports = router
 
@@ -32,7 +33,7 @@ router.get('/getall-category', function (req, res, next) {
   })
 })
 
-router.post('/add-category', function (req, res, next) {  
+router.post('/add-category', adminvalidator.isAdminLoggedin, function (req, res, next) {  
   MainCategory.addcategory(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)

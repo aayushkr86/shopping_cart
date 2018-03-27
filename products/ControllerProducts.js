@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var MainProducts = require('./MainProducts')
 var multer = require('multer');
+var adminvalidator = require('../admin/passport/passportlogin_validator')
 
 var storage = multer.diskStorage({ 
     destination : function(req,file,callback){  console.log(req.body)
@@ -67,7 +68,7 @@ router.post('/pic-upload', upload.single('pic'), function (req, res, next) {  //
   })
 })
 
-router.post('/add-products', function (req, res, next) {  
+router.post('/add-products', adminvalidator.isAdminLoggedin, function (req, res, next) {  
   MainProducts.addproducts(req, next, function (err, data) {
     if (err && data) {
       response(res, 400, err, data)

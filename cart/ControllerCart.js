@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var MainCart = require('./MainCart')
 var passloginvalidator = require('../passport/pass_loginvalidator')
+var adminvalidator = require('../admin/passport/passportlogin_validator')
 
 module.exports = router
 
@@ -110,8 +111,7 @@ router.get('/remove/:product_id',function(req, res, next) {
 })
 
 //change order status //admin
-router.post('/change-order-status', //passloginvalidator.isLoggedIn, admin should be loggedin
-function(req, res, next) {
+router.post('/change-order-status', adminvalidator.isAdminLoggedin, function(req, res, next) {
   MainCart.changestatus(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)
@@ -126,8 +126,7 @@ function(req, res, next) {
 })
 
 //all orders except delivered //admin
-router.get('/all-pending-orders', //passloginvalidator.isLoggedIn, admin should be loggedin
-function(req, res, next) {
+router.get('/all-pending-orders', adminvalidator.isAdminLoggedin, function(req, res, next) {
   MainCart.allpendingorders(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)

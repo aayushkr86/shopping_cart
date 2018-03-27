@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var MainCoupons = require('./MainCoupons')
+var adminvalidator = require('../admin/passport/passportlogin_validator')
 
 module.exports = router
 
@@ -32,7 +33,7 @@ router.post('/is-coupon', function (req, res, next) {
   })
 })
 
-router.post('/add-coupon', function (req, res, next) {  
+router.post('/add-coupon', adminvalidator.isAdminLoggedin, function (req, res, next) {  
   MainCoupons.addcoupon(req, next, function (err, data) { //console.log(err,data)
     if (err && data) {
       response(res, 400, err, data)
